@@ -5,9 +5,9 @@ import java.util.List;
 
 public class Particle {
 
-    private static int ID = 1;
+    private static long ID = 1;
 
-    private final int id;
+    private final long id;
     private final Coordinates coordinates;
 
     private final List<Particle> neighbours;
@@ -22,7 +22,7 @@ public class Particle {
         this.neighbours = new ArrayList<>();
     }
 
-    public int getId(){
+    public long getId(){
         return this.id;
     }
 
@@ -38,8 +38,20 @@ public class Particle {
         return this.coordinates.getY();
     }
 
-    public boolean isNeighbour(int particleId) {
+    public boolean isNeighbourOf(int particleId) {
         return neighbours.stream().anyMatch(neighbour -> neighbour.getId() == particleId);
+    }
+
+    public boolean isWithinInteractionRadius(Particle otherParticle, double interactionRadius) {
+        double horizontalDistance  = Math.abs(this.coordinates.getX() - otherParticle.getX());
+        double verticalDistance = Math.abs(this.coordinates.getY() - otherParticle.getY());
+        double totalDistance = Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2));
+
+        // Perhaps we should add a boolean to check if it is a point particle?
+        totalDistance -= this.properties.getRadius();
+        totalDistance -= otherParticle.properties.getRadius();
+
+        return totalDistance <= interactionRadius;
     }
 
     public void addNeighbour(Particle particle){
