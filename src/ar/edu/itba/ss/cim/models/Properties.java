@@ -16,4 +16,12 @@ public class Properties {
     public String getMetadata() {
         return metadata;
     }
+
+    @Override
+    public String toString() {
+        return "Properties{" +
+                "radius=" + radius +
+                ", metadata='" + metadata + '\'' +
+                '}';
+    }
 }

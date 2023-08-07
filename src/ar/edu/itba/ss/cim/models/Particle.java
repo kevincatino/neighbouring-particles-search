@@ -9,7 +9,7 @@ public class Particle {
 
     private static int ID = 1;
 
-    private int id;
+    private final int id;
     private final Coordinates coordinates;
 
     private final List<Particle> neighbours;
@@ -17,10 +17,14 @@ public class Particle {
     private final Properties properties;
 
     Particle(double x, double y, Properties properties) {
+        this(Coordinates.of(x,y), properties);
+    }
+
+    Particle(Coordinates coordinates, Properties properties) {
         this.id = ID;
         ID++;
         this.properties = properties;
-        this.coordinates = Coordinates.of(x,y);
+        this.coordinates = coordinates;
         this.neighbours = new ArrayList<>();
     }
 
@@ -69,7 +73,7 @@ public class Particle {
 
     @Override
     public String toString(){
-        return "id: " + id + ", x: " + getX() + ", y: " + getY() + "radius: " + getRadius();
+        return "{id: " + id + ", x: " + getX() + ", y: " + getY() + " radius: " + getRadius() + "}";
     }
 
 

@@ -1,34 +1,47 @@
 package ar.edu.itba.ss.cim.utils;
 
 import ar.edu.itba.ss.cim.Coordinates;
+import ar.edu.itba.ss.cim.models.Properties;
+import ar.edu.itba.ss.cim.models.StaticStats;
+import ar.edu.itba.ss.cim.models.TemporalCoordinates;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 
 public interface Fileparser {
-    static Map<Integer, List<Coordinates>> parseDynamicFile(String filePath) throws IOException {
+    static List<TemporalCoordinates> parseDynamicFile(String filePath) throws IOException {
 
         String dynamicFileText = IO.readFile(filePath);
 
-        HashMap<Integer, List<Coordinates>> timeData = new HashMap<>();
+        List<TemporalCoordinates> timeData = new ArrayList<>();
         Scanner scanner = new Scanner(dynamicFileText);
 
         String line;
         Integer currentTime = null;
+        TemporalCoordinates tc = null;
+        Integer idCounter = null;
 
         while ((scanner.hasNextLine() &&  (line = scanner.nextLine()) != null)) {
+
             if (line.contains(" ")) {
+                if (idCounter == null || tc == null) {
+                    throw new RuntimeException("Invalid dynamic file format");
+                }
                 String[] parts = line.split(" ");
                 double x = Double.parseDouble(parts[0]);
                 double y = Double.parseDouble(parts[1]);
-                timeData.get(currentTime).add(Coordinates.of(x,y));
+                tc.addCoordinates(idCounter++,Coordinates.of(x,y));
             } else {
                 currentTime = Integer.parseInt(line);
-                timeData.put(currentTime, new ArrayList<>());
+                idCounter = 1;
+               tc = new TemporalCoordinates(currentTime);
+                timeData.add(currentTime, tc);
             }
         }
 
@@ -36,29 +49,34 @@ public interface Fileparser {
         return timeData;
     }
 
-    static Map<Integer, List<Coordinates>> parseStaticFile(String filePath) throws IOException {
+    static StaticStats parseStaticFile(String filePath) throws IOException {
 
         String staticFileText = IO.readFile(filePath);
 
         HashMap<Integer, List<Coordinates>> timeData = new HashMap<>();
         Scanner scanner = new Scanner(staticFileText);
-
+        Map<Integer, Properties> propertiesMap = new HashMap<>();
         String line;
-        Integer currentTime = null;
+        int numberOfParticles = 0;
+        double length = 0;
+        int lineNumber = 0;
 
         while ((scanner.hasNextLine() &&  (line = scanner.nextLine()) != null)) {
-            if (line.contains(" ")) {
-                String[] parts = line.split(" ");
-                double x = Double.parseDouble(parts[0]);
-                double y = Double.parseDouble(parts[1]);
-                timeData.get(currentTime).add(Coordinates.of(x,y));
+            lineNumber++;
+
+            if (lineNumber == 1) {
+                numberOfParticles = Integer.parseInt(line);
+            } else if (lineNumber == 2) {
+                length = Double.parseDouble(line);
             } else {
-                currentTime = Integer.parseInt(line);
-                timeData.put(currentTime, new ArrayList<>());
+                String[] parts = line.split(" ");
+                float radius = Float.parseFloat(parts[0]);
+                int particleId = lineNumber-2;
+                propertiesMap.put(particleId,new Properties(radius, parts[1]));
             }
         }
 
         scanner.close();
-        return timeData;
+        return new StaticStats(numberOfParticles, length, propertiesMap);
     }
 }
