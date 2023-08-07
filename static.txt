@@ -1,0 +1,5 @@
+3
+4.01
+1.1 rojo
+0 verde
+4 amarillo
