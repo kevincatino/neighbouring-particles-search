@@ -1,6 +1,6 @@
 package ar.edu.itba.ss.cim.utils;
 
-import ar.edu.itba.ss.cim.Coordinates;
+import ar.edu.itba.ss.cim.models.Coordinates;
 
 import java.io.IOException;
 import java.util.ArrayList;

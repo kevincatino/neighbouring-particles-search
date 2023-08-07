@@ -1,14 +1,12 @@
 package ar.edu.itba.ss.cim.models;
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class Cell {
 
     private final List<Particle> particles;
-    private Coordinates cellCoordinates;
+    private final Coordinates cellCoordinates;
     private final double cellLarge;
 
     public Cell(Coordinates cellCoordinates, double cellLarge) {

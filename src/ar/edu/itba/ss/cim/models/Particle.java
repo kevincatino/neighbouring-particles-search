@@ -1,7 +1,5 @@
 package ar.edu.itba.ss.cim.models;
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +7,7 @@ public class Particle {
 
     private static int ID = 1;
 
-    private int id;
+    private final int id;
     private final Coordinates coordinates;
 
     private final List<Particle> neighbours;
@@ -71,7 +69,4 @@ public class Particle {
     public String toString(){
         return "id: " + id + ", x: " + getX() + ", y: " + getY() + "radius: " + getRadius();
     }
-
-
-
 }

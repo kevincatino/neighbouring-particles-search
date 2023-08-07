@@ -1,15 +1,8 @@
-package ar.edu.itba.ss.cim;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+package ar.edu.itba.ss.cim.models;
 
 public class Coordinates {
-    private double x;
-    private double y;
+    private final double x;
+    private final double y;
 
     private Coordinates(double x, double y) {
         this.x = x;

@@ -1,5 +1,6 @@
 package ar.edu.itba.ss.cim;
 
+import ar.edu.itba.ss.cim.models.Coordinates;
 import ar.edu.itba.ss.cim.utils.Fileparser;
 import ar.edu.itba.ss.cim.utils.IO;
 

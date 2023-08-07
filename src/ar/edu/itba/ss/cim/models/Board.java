@@ -1,13 +1,11 @@
 package ar.edu.itba.ss.cim.models;
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 public class Board {
 
-    private int M;
-    private double L;
-    private double cellsLength;
-    private Cell[][] cells;
+    private final int M;
+    private final double L;
+    private final double cellsLength;
+    private final Cell[][] cells;
 
     public Board(int M, int L){
         this.M = M;
