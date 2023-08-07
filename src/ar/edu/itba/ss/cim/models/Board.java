@@ -1,58 +1,97 @@
 package ar.edu.itba.ss.cim.models;
 
-import java.util.ArrayList;
-import java.util.List;
+
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class Board {
 
     private final int M;
-    private final double L;
     private final Cell[][] cells;
 
-    public Board(int M, int L){
+
+    private final double boardLength;
+    private final double cellLength;
+
+    public int getTime() {
+        return time;
+    }
+
+    private final int time;
+
+    @Override
+    public String toString() {
+        StringBuilder board = new StringBuilder();
+        for (Cell[] row :cells) {
+            for (Cell cell : row) {
+                board.append(cell).append(" ");
+            }
+            // Remove the trailing space and add a newline
+            board.setLength(board.length() - 1);
+            board.append("\n");
+        }
+        // Remove the trailing newline
+        board.setLength(board.length() - 1);
+        return "Board{" +
+                "M=" + M +
+                ", boardLength=" + boardLength +
+                ", cellLength=" + cellLength +
+                ", time=" + time +
+                ",\n cells=\n" + board +
+                '}';
+    }
+
+    public Board(int M, double boardLength, int time){
+        this.time = time;
         this.M = M;
-        this.L = L;
+        this.boardLength = boardLength;
+        this.cellLength = boardLength/ (double) M;
         this.cells = new Cell[M][M];
 
-        double cellsLength = L/ (double) M;
-        IntStream.range(0, M)
-                .forEach(i -> IntStream.range(0, M)
-                        .forEach(j -> this.cells[i][j] = new Cell(cellsLength)));
-
+        for(int i=0; i<M; i++){
+            double x = cellLength *i;
+            for(int j=0; j<M; j++){
+                double y = cellLength * j;
+                this.cells[i][j] = new Cell();
+            }
+        }
     }
 
-    public void addParticle(Particle particle){
-        int row = (int) ((particle.getX() * M) / L);
-        int col = (int) ((particle.getY() * M) / L);
-        this.cells[row][col].addParticle(particle);
-    }
-
-    public Cell getCell(int row, int col){
-        return this.cells[row][col];
+    public Cell getCell(int i, int j){
+        return this.cells[i][j];
     }
 
     public int getM(){
         return M;
     }
 
-    public double getL() {
-        return L;
-    }
-
-    public double getCellLength(int row, int col) {
-        return cells[row][col].getCellLength();
-    }
-
-    public List<Particle> getParticlesAt(int row, int col){
+    public Set<Particle> getParticlesAt(int row, int col){
         return this.cells[row][col].getParticles();
     }
 
-    public List<Particle> getAllParticles(){
-        List<Particle> particles = new ArrayList<>();
+    public Set<Particle> getAllParticles(){
+        Set<Particle> particles = new HashSet<>();
         IntStream.range(0, M)
                 .forEach(i -> IntStream.range(0, M)
                         .forEach(j -> particles.addAll(cells[i][j].getParticles())));
         return particles;
     }
+    public double getBoardLength() {
+        return boardLength;
+    }
+
+    public void addParticle(Particle particle){
+        double x = particle.getX();
+        double y = particle.getY();
+        if (x > boardLength || y > boardLength || x < 0 || y < 0) {
+            throw new IllegalArgumentException("particle does not fit inside board");
+        }
+         int row = (int) ( x / cellLength);
+         int col= (int) (y / cellLength);
+        this.cells[row][col].addParticle(particle);
+    }
+
 }

@@ -1,13 +1,17 @@
 package ar.edu.itba.ss.cim.models;
 
+
+import ar.edu.itba.ss.cim.Coordinates;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Particle {
 
-    private static long ID = 1;
 
-    private final long id;
+    private static int ID = 1;
+
+    private final int id;
     private final Coordinates coordinates;
 
     private final List<Particle> neighbours;
@@ -15,14 +19,18 @@ public class Particle {
     private final Properties properties;
 
     Particle(double x, double y, Properties properties) {
+        this(Coordinates.of(x,y), properties);
+    }
+
+    Particle(Coordinates coordinates, Properties properties) {
         this.id = ID;
         ID++;
         this.properties = properties;
-        this.coordinates = Coordinates.of(x,y);
+        this.coordinates = coordinates;
         this.neighbours = new ArrayList<>();
     }
 
-    public long getId(){
+    public int getId(){
         return this.id;
     }
 
@@ -54,6 +62,10 @@ public class Particle {
         return totalDistance <= interactionRadius;
     }
 
+    public boolean isNeighbour(int particleId) {
+        return neighbours.stream().anyMatch(neighbour -> neighbour.getId() == particleId);
+    }
+
     public void addNeighbour(Particle particle){
         this.neighbours.add(particle);
     }
@@ -79,6 +91,8 @@ public class Particle {
 
     @Override
     public String toString(){
-        return "id: " + id + ", x: " + getX() + ", y: " + getY() + "radius: " + getRadius();
+
+        return "{id: " + id + ", x: " + getX() + ", y: " + getY() + " radius: " + getRadius() + "}";
     }
+
 }

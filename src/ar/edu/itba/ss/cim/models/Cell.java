@@ -1,19 +1,15 @@
 package ar.edu.itba.ss.cim.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Cell {
 
-    private final List<Particle> particles;
-    private final double cellLength;
+    private final Set<Particle> particles = new HashSet<>();
 
-    public Cell(double cellLength) {
-        this.particles = new ArrayList<>();
-        this.cellLength = cellLength;
-    }
 
-    public List<Particle> getParticles(){
+    public Set<Particle> getParticles(){
         return this.particles;
     }
 
@@ -21,8 +17,11 @@ public class Cell {
         this.particles.add(particle);
     }
 
-    public double getCellLength(){
-        return this.cellLength;
+    @Override
+    public String toString() {
+        String particlesString =  particles.stream().map(p -> String.format("%d",p.getId())).collect(Collectors.joining(","));
+        return String.format("[%10s]",particlesString);
+
     }
 
 }
