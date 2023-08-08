@@ -28,6 +28,10 @@ public class StaticStats {
         this.propertiesByParticleId = propertiesByParticleId;
     }
 
+    public Properties getProperty(int id) {
+        return propertiesByParticleId.get(id);
+    }
+
     public Set<Map.Entry<Integer, Properties>> getIdPropertyPairs() {
         return propertiesByParticleId.entrySet();
     }

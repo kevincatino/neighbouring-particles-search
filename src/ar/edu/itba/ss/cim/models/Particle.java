@@ -12,7 +12,7 @@ public class Particle {
     private static int ID = 1;
 
     private final int id;
-    private final Coordinates coordinates;
+    private Coordinates coordinates;
 
     private final List<Particle> neighbours;
 
@@ -32,6 +32,10 @@ public class Particle {
 
     public int getId(){
         return this.id;
+    }
+
+    public void setCoordinates(Coordinates coordinates) {
+        this.coordinates = coordinates;
     }
 
     public double getRadius() {
