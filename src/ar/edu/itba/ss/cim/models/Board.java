@@ -1,17 +1,12 @@
 package ar.edu.itba.ss.cim.models;
 
 
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Board {
 
     private final int M;
-    private Cell[][] cells;
+    private final Cell[][] cells;
 
     private final Set<Particle> boardParticles = new HashSet<>();
 
@@ -30,7 +25,7 @@ public class Board {
     @Override
     public String toString() {
         StringBuilder board = new StringBuilder();
-        for (Cell[] row :cells) {
+        for (Cell[] row : cells) {
             for (Cell cell : row) {
                 board.append(cell).append(" ");
             }
@@ -50,33 +45,34 @@ public class Board {
                 '}';
     }
 
-    public Board(int M, double boardLength, double interactionRadius){
+    public Board(int M, double boardLength, double interactionRadius) {
         this.M = M;
         this.interactionRadius = interactionRadius;
         this.boardLength = boardLength;
-        this.cellLength = boardLength/ (double) M;
+        this.cellLength = boardLength / (double) M;
         this.cells = new Cell[M][M];
 
-        for(int i=0; i<M; i++){
-            for(int j=0; j<M; j++){
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
                 this.cells[i][j] = new Cell();
             }
         }
     }
 
     private Cell getCell(int i, int j){
+
         return this.cells[i][j];
     }
 
     private void clearCells() {
-        for (int i=0 ; i<M ; i++) {
-            for (int j=0 ; j<M ; j++) {
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
                 cells[i][j].clearCell();
             }
         }
     }
 
-    public int getM(){
+    public int getM() {
         return M;
     }
 
@@ -84,13 +80,14 @@ public class Board {
         this.time = time;
     }
 
-    public Set<Particle> getParticlesAt(int row, int col){
+    public Set<Particle> getParticlesAt(int row, int col) {
         return this.cells[row][col].getParticles();
     }
 
-    public Set<Particle> getAllParticles(){
+    public Set<Particle> getAllParticles() {
         return boardParticles;
     }
+
     public double getBoardLength() {
         return boardLength;
     }
@@ -101,8 +98,8 @@ public class Board {
         if (x > boardLength || y > boardLength || x < 0 || y < 0) {
             throw new IllegalArgumentException("particle does not fit inside board");
         }
-         int row = (int) (y / cellLength);
-         int col= (int) (x / cellLength);
+        int row = (int) (y / cellLength);
+        int col = (int) (x / cellLength);
         this.cells[row][col].addParticle(particle);
     }
 
@@ -141,11 +138,12 @@ public class Board {
     private Collection<Cell> getNeighbourCells(int i, int j) {
 
         Set<Cell> neighbourCells = new HashSet<>();
-        for (int x=i-1 ; x <= i+1 ; x++) {
-            for (int y=j-1 ; y <= j+1 ; y++) {
-               if (x >=0 && x < M && y >= 0 && y < M) {
-                   neighbourCells.add(cells[x][y]);
-               }
+
+        for (int x = i - 1; x <= i + 1; x++) {
+            for (int y = j - 1; y <= j + 1; y++) {
+                if (x >= 0 && x < M && y >= 0 && y < M) {
+                    neighbourCells.add(cells[x][y]);
+                }
             }
         }
         // Possibly consider wrapped boundaries condition
@@ -153,16 +151,16 @@ public class Board {
         return neighbourCells;
     }
 
-    public Map<Particle,Set<Particle>> getNeighbours() {
-        Map<Particle,Set<Particle>> neighbours = new HashMap<>();
+    public Map<Particle, Set<Particle>> getNeighbours() {
+        Map<Particle, Set<Particle>> neighbours = new HashMap<>();
         Set<Pair<Cell>> comparedCells = new HashSet<>();
-        for (int i=0 ; i< M ; i++) {
-            for (int j=0 ; j<M ; j++) {
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < M; j++) {
                 Cell cell = cells[i][j];
-                Collection<Cell> neighbourCells = getNeighbourCells(i,j);
+                Collection<Cell> neighbourCells = getNeighbourCells(i, j);
                 for (Cell otherCell : neighbourCells) {
                     Pair<Cell> pair = Pair.of(cell, otherCell);
-                    if(!comparedCells.contains(pair)) {
+                    if (!comparedCells.contains(pair)) {
                         comparedCells.add(pair);
                         computeNeighbours(cell, otherCell);
                     }
@@ -171,7 +169,7 @@ public class Board {
         }
 
         for (Particle particle : boardParticles) {
-            neighbours.put(particle,particle.getNeighbours());
+            neighbours.put(particle, particle.getNeighbours());
         }
 
         return neighbours;

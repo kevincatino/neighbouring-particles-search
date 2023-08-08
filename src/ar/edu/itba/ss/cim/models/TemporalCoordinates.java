@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TemporalCoordinates {
-    private final Map<Integer,Coordinates> coordinatesById = new HashMap<>();
+    private final Map<Integer, Coordinates> coordinatesById = new HashMap<>();
     private final int time;
 
     public TemporalCoordinates(int time) {
@@ -12,7 +12,7 @@ public class TemporalCoordinates {
     }
 
     public void addCoordinates(int particleId, Coordinates coordinates) {
-        coordinatesById.put(particleId,coordinates);
+        coordinatesById.put(particleId, coordinates);
     }
 
     public Coordinates getCoordinates(int particleId) {

@@ -1,12 +1,8 @@
 package ar.edu.itba.ss.cim.models;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
-public class BoardSequence implements Iterable<Board>{
+public class BoardSequence implements Iterable<Board> {
     private final List<TemporalCoordinates> temporalCoordinatesList;
 
 
@@ -21,10 +17,10 @@ public class BoardSequence implements Iterable<Board>{
         this.temporalCoordinatesList = temporalCoordinatesList;
         board = new Board(M, staticStats.getBoardLength(), interactionRadius);
 
-        Coordinates coordinates = Coordinates.of(0,0);
-        for (Map.Entry<Integer,Properties> idProp : staticStats.getIdPropertyPairs()) {
+        Coordinates coordinates = Coordinates.of(0, 0);
+        for (Map.Entry<Integer, Properties> idProp : staticStats.getIdPropertyPairs()) {
             Properties properties = idProp.getValue();
-            Particle particle = new Particle(coordinates,properties);
+            Particle particle = new Particle(coordinates, properties);
             particles.add(particle);
         }
         board.addParticles(particles);

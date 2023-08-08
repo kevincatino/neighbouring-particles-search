@@ -5,10 +5,12 @@ import java.util.Objects;
 public class Pair<T> {
     private final T value1;
     private final T value2;
+
     Pair(T value1, T value2) {
         this.value1 = value1;
         this.value2 = value2;
     }
+
     public static <T> Pair<T> of(T value1, T value2) {
         return new Pair<>(value1, value2);
     }
