@@ -151,9 +151,18 @@ public class Board {
         return neighbourCells;
     }
 
-    public Map<Particle, Set<Particle>> getNeighbours() {
+
+    private void clearNeighbours() {
+        boardParticles.forEach(Particle::clearNeighbours);
+    }
+
+
+    public Map<Particle, Set<Particle>> getNeighbours(METHOD method) {
+        clearNeighbours();
         Map<Particle, Set<Particle>> neighbours = new HashMap<>();
-        Set<Pair<Cell>> comparedCells = new HashSet<>();
+        switch(method) {
+            case CIM:
+                Set<Pair<Cell>> comparedCells = new HashSet<>();
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < M; j++) {
                 Cell cell = cells[i][j];
@@ -167,12 +176,29 @@ public class Board {
                 }
             }
         }
+        break;
+            case BRUTE_FORCE:
+                for (Particle particle : boardParticles) {
+                    for (Particle otherParticle : boardParticles) {
+                        if (particle.isWithinInteractionRadius(otherParticle,interactionRadius)) {
+                            particle.addNeighbour(otherParticle);
+                            otherParticle.addNeighbour(particle);
+                        }
+                    }
+                }
+        }
+
 
         for (Particle particle : boardParticles) {
             neighbours.put(particle, particle.getNeighbours());
         }
 
         return neighbours;
+    }
+
+    public enum METHOD {
+        BRUTE_FORCE,
+        CIM
     }
 
 }

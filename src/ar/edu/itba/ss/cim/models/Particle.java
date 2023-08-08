@@ -88,7 +88,7 @@ public class Particle {
         this.neighbours.add(particle);
     }
 
-    public void clearNeighbour() {
+    public void clearNeighbours() {
         this.neighbours.clear();
     }
 

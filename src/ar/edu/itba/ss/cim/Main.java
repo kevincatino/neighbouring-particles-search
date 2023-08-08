@@ -15,7 +15,6 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        System.out.println(Coordinates.of(1,12.1).getDistanceTo(Coordinates.of(1.5,2.3)));
        String STATIC_FILE_PATH = "static.txt";
        String DYNAMIC_FILE_PATH = "dynamic.txt";
        int M = 4;
@@ -27,7 +26,10 @@ public class Main {
         for (Board b : boardSequence) {
             System.out.println(b);
             System.out.println("Neighbours");
-            System.out.println(b.getNeighbours());
+            long start = System.currentTimeMillis();
+            System.out.println(b.getNeighbours(Board.METHOD.CIM));
+            long end = System.currentTimeMillis();
+            System.out.printf("Computation time: %d ms\n",(end-start));
         }
     }
 }
