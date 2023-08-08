@@ -13,9 +13,9 @@ public class BoardSequence implements Iterable<Board> {
 
     private final Board board;
 
-    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M, double interactionRadius) {
+    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M, double interactionRadius, Board.BoundaryConditions boundaryConditions) {
         this.temporalCoordinatesList = temporalCoordinatesList;
-        board = new Board(M, staticStats.getBoardLength(), interactionRadius);
+        board = new Board(M, staticStats.getBoardLength(), interactionRadius, boundaryConditions);
 
         Coordinates coordinates = Coordinates.of(0, 0);
         for (Map.Entry<Integer, Properties> idProp : staticStats.getIdPropertyPairs()) {

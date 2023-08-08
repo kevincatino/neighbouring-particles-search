@@ -21,6 +21,9 @@ public class Board {
     }
 
     private int time = 0;
+    private final InteractionRadiusComputer interactionRadiusComputer;
+
+    private final NeighbourCellsComputer neighbourCellsComputer;
 
     @Override
     public String toString() {
@@ -45,12 +48,14 @@ public class Board {
                 '}';
     }
 
-    public Board(int M, double boardLength, double interactionRadius) {
+    public Board(int M, double boardLength, double interactionRadius, BoundaryConditions boundaryConditions) {
         this.M = M;
         this.interactionRadius = interactionRadius;
         this.boardLength = boardLength;
         this.cellLength = boardLength / (double) M;
         this.cells = new Cell[M][M];
+        this.neighbourCellsComputer = boundaryConditions.getNeighbourCellsComputer();
+        this.interactionRadiusComputer = boundaryConditions.getInteractionRadiusComputer(boardLength, interactionRadius);
 
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < M; j++) {
@@ -59,7 +64,7 @@ public class Board {
         }
     }
 
-    private Cell getCell(int i, int j){
+    private Cell getCell(int i, int j) {
 
         return this.cells[i][j];
     }
@@ -127,28 +132,12 @@ public class Board {
         Set<Particle> cell2Particles = cell2.getParticles();
         for (Particle particle : cell1Particles) {
             for (Particle otherParticle : cell2Particles) {
-                if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius, BOUNDARY_CONDITIONS.NOT_PERIODIC)) {
+                if (!particle.equals(otherParticle) && interactionRadiusComputer.isWithinInteractionRadius(particle, otherParticle)) {
                     particle.addNeighbour(otherParticle);
                     otherParticle.addNeighbour(particle);
                 }
             }
         }
-    }
-
-    private Collection<Cell> getNeighbourCells(int i, int j) {
-
-        Set<Cell> neighbourCells = new HashSet<>();
-
-        for (int x = i - 1; x <= i + 1; x++) {
-            for (int y = j - 1; y <= j + 1; y++) {
-                if (x >= 0 && x < M && y >= 0 && y < M) {
-                    neighbourCells.add(cells[x][y]);
-                }
-            }
-        }
-        // Possibly consider wrapped boundaries condition
-
-        return neighbourCells;
     }
 
 
@@ -157,16 +146,16 @@ public class Board {
     }
 
 
-    public Map<Particle, Set<Particle>> getNeighbours(METHOD method, BOUNDARY_CONDITIONS boundaryConditions) {
+    public Map<Particle, Set<Particle>> getNeighbours(Method method) {
         clearNeighbours();
         Map<Particle, Set<Particle>> neighbours = new HashMap<>();
-        switch(method) {
+        switch (method) {
             case CIM:
                 Set<Pair<Cell>> comparedCells = new HashSet<>();
                 for (int i = 0; i < M; i++) {
                     for (int j = 0; j < M; j++) {
                         Cell cell = cells[i][j];
-                        Collection<Cell> neighbourCells = getNeighbourCells(i, j);
+                        Collection<Cell> neighbourCells = neighbourCellsComputer.getNeighbourCells(cells, i, j);
                         for (Cell otherCell : neighbourCells) {
                             Pair<Cell> pair = Pair.of(cell, otherCell);
                             if (!comparedCells.contains(pair)) {
@@ -180,7 +169,7 @@ public class Board {
             case BRUTE_FORCE:
                 for (Particle particle : boardParticles) {
                     for (Particle otherParticle : boardParticles) {
-                        if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius, boundaryConditions)) {
+                        if (!particle.equals(otherParticle) && interactionRadiusComputer.isWithinInteractionRadius(particle, otherParticle)) {
                             particle.addNeighbour(otherParticle);
                             otherParticle.addNeighbour(particle);
                         }
@@ -196,41 +185,93 @@ public class Board {
         return neighbours;
     }
 
-    public enum METHOD {
+    public enum Method {
         BRUTE_FORCE,
         CIM
     }
 
-    public enum BOUNDARY_CONDITIONS {
-        PERIODIC(){
+    @FunctionalInterface
+    private interface InteractionRadiusComputer {
+        boolean isWithinInteractionRadius(Particle particle1, Particle particle2);
+    }
+
+    @FunctionalInterface
+    private interface NeighbourCellsComputer {
+        Collection<Cell> getNeighbourCells(Cell[][] cells, int i, int j);
+    }
+
+    public enum BoundaryConditions {
+        PERIODIC {
+            public NeighbourCellsComputer getNeighbourCellsComputer() {
+                return (cells, i, j) -> {
+                    int M = cells.length;
+                    Set<Cell> neighbourCells = new HashSet<>();
+
+                    for (int x = i - 1; x <= i + 1; x++) {
+                        for (int y = j - 1; y <= j + 1; y++) {
+                            int xIndex = (x < 0 ? M - 1 : (x >= M ? 0 : x));
+                            int yIndex = (y < 0 ? M - 1 : (y >= M ? 0 : y));
+                            neighbourCells.add(cells[xIndex][yIndex]);
+                        }
+                    }
+
+                    return neighbourCells;
+                };
+            }
+
             @Override
-            public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius) {
-                if(super.isWithinInteractionMethod(particle1, particle2, interactionRadius)){
-                    return true;
-                }
+            public InteractionRadiusComputer getInteractionRadiusComputer(double boardLength, double interactionRadius) {
+                return (Particle p1, Particle p2) -> {
+                    if (super.getInteractionRadiusComputer(boardLength, interactionRadius).isWithinInteractionRadius(p1, p2)) {
+                        return true;
+                    }
+                    double horizontalDistance = Math.abs(p1.getX() - p2.getX());
+                    double verticalDistance = Math.abs(p1.getY() - p2.getY());
+                    double alternativeHorizontalDistance = boardLength - horizontalDistance;
+                    double alternativeVerticalDistance = boardLength - verticalDistance;
 
-                // VER SI SON VECINAS DE FORMA PERIODICA
+                    horizontalDistance = Math.min(horizontalDistance, alternativeHorizontalDistance);
+                    verticalDistance = Math.min(verticalDistance, alternativeVerticalDistance);
 
-                return false;
+
+                    return (Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2)) - p1.getRadius() - p2.getRadius()) < interactionRadius;
+
+                };
             }
         },
-        NOT_PERIODIC(){
-            @Override
-            public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius) {
-                return super.isWithinInteractionMethod(particle1, particle2, interactionRadius);
+        NOT_PERIODIC {
+            public NeighbourCellsComputer getNeighbourCellsComputer() {
+                return (cells, i, j) -> {
+                    int M = cells.length;
+                    Set<Cell> neighbourCells = new HashSet<>();
+
+                    for (int x = i - 1; x <= i + 1; x++) {
+                        for (int y = j - 1; y <= j + 1; y++) {
+                            if (x >= 0 && x < M && y >= 0 && y < M) {
+                                neighbourCells.add(cells[x][y]);
+                            }
+                        }
+                    }
+
+                    return neighbourCells;
+                };
             }
         };
 
+        public abstract NeighbourCellsComputer getNeighbourCellsComputer();
 
-        public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius){
-            double totalDistance = particle1.getDistanceTo(particle2);
+        public InteractionRadiusComputer getInteractionRadiusComputer(double boardLength, double interactionRadius) {
+            return (Particle particle1, Particle particle2) -> {
+                double totalDistance = particle1.getDistanceTo(particle2);
 
-            // Perhaps we should add a boolean to check if it is a point particle?
-            totalDistance -= particle1.getRadius();
-            totalDistance -= particle2.getRadius();
+                totalDistance -= particle1.getRadius();
+                totalDistance -= particle2.getRadius();
 
-            return totalDistance <= interactionRadius;
+                return totalDistance <= interactionRadius;
+            };
         }
+
+
     }
 
 }

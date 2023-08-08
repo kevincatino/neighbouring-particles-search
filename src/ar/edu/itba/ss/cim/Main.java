@@ -3,7 +3,6 @@ package ar.edu.itba.ss.cim;
 
 import ar.edu.itba.ss.cim.models.Board;
 import ar.edu.itba.ss.cim.models.BoardSequence;
-import ar.edu.itba.ss.cim.models.Coordinates;
 import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
 import ar.edu.itba.ss.cim.utils.Fileparser;
@@ -21,13 +20,13 @@ public class Main {
        double interactionRadius = 5;
        StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
        List<TemporalCoordinates> temporalCoordinates = Fileparser.parseDynamicFile(DYNAMIC_FILE_PATH);
-        BoardSequence boardSequence = new BoardSequence(staticStats,temporalCoordinates, M, interactionRadius);
+        BoardSequence boardSequence = new BoardSequence(staticStats,temporalCoordinates, M, interactionRadius, Board.BoundaryConditions.PERIODIC);
 
         for (Board b : boardSequence) {
             System.out.println(b);
             System.out.println("Neighbours");
             long start = System.currentTimeMillis();
-            System.out.println(b.getNeighbours(Board.METHOD.CIM, Board.BOUNDARY_CONDITIONS.PERIODIC));
+            System.out.println(b.getNeighbours(Board.Method.CIM));
 
             long end = System.currentTimeMillis();
             System.out.printf("Computation time: %d ms\n",(end-start));

@@ -23,7 +23,7 @@ public class Cell {
     @Override
     public String toString() {
         String particlesString = cellParticles.stream().map(p -> String.format("%d", p.getId())).collect(Collectors.joining(","));
-        return String.format("[%10s]", particlesString);
+        return String.format("[%40s]", particlesString);
 
     }
 

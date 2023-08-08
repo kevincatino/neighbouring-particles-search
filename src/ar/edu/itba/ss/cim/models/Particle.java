@@ -70,16 +70,7 @@ public class Particle {
         return coordinates.getDistanceTo(other.coordinates);
     }
 
-    public boolean isWithinInteractionRadius(Particle otherParticle, double interactionRadius, Board.BOUNDARY_CONDITIONS boundaryConditions) {
 
-        double totalDistance = getDistanceTo(otherParticle);
-
-        // Perhaps we should add a boolean to check if it is a point particle?
-        totalDistance -= this.properties.getRadius();
-        totalDistance -= otherParticle.properties.getRadius();
-
-        return totalDistance <= interactionRadius;
-    }
 
     public boolean isNeighbour(int particleId) {
         return neighbours.stream().anyMatch(neighbour -> neighbour.getId() == particleId);
