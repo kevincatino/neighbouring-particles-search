@@ -27,11 +27,8 @@ public class Main {
             System.out.println(b);
             System.out.println("Neighbours");
             long start = System.currentTimeMillis();
-<<<<<<< HEAD
             System.out.println(b.getNeighbours(Board.METHOD.CIM, Board.BOUNDARY_CONDITIONS.PERIODIC));
-=======
-            System.out.println(b.getNeighbours(Board.METHOD.BRUTE_FORCE));
->>>>>>> 48466605d553d6ab2880ac4e39b41e4107cca454
+
             long end = System.currentTimeMillis();
             System.out.printf("Computation time: %d ms\n",(end-start));
         }

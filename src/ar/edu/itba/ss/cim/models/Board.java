@@ -127,7 +127,7 @@ public class Board {
         Set<Particle> cell2Particles = cell2.getParticles();
         for (Particle particle : cell1Particles) {
             for (Particle otherParticle : cell2Particles) {
-                if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius)) {
+                if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius, BOUNDARY_CONDITIONS.NOT_PERIODIC)) {
                     particle.addNeighbour(otherParticle);
                     otherParticle.addNeighbour(particle);
                 }
