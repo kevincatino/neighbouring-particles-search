@@ -23,13 +23,13 @@ public interface Fileparser {
         TemporalCoordinates tc = null;
         Integer idCounter = null;
 
-        while ((scanner.hasNextLine() && (line = scanner.nextLine()) != null)) {
+        while ((scanner.hasNextLine() && (line = scanner.nextLine().trim()) != null)) {
 
             if (line.contains(" ")) {
                 if (idCounter == null || tc == null) {
                     throw new RuntimeException("Invalid dynamic file format");
                 }
-                String[] parts = line.split(" ");
+                String[] parts = line.split("\s+");
                 double x = Double.parseDouble(parts[0]);
                 double y = Double.parseDouble(parts[1]);
                 tc.addCoordinates(idCounter++, Coordinates.of(x, y));
@@ -59,15 +59,15 @@ public interface Fileparser {
         double length = 0;
         int lineNumber = 0;
 
-        while ((scanner.hasNextLine() && (line = scanner.nextLine()) != null)) {
+        while ((scanner.hasNextLine() && (line = scanner.nextLine().trim()) != null)) {
             lineNumber++;
 
             if (lineNumber == 1) {
-                numberOfParticles = Integer.parseInt(line);
+                numberOfParticles = Integer.parseInt(line.trim());
             } else if (lineNumber == 2) {
-                length = Double.parseDouble(line);
+                length = Double.parseDouble(line.trim());
             } else {
-                String[] parts = line.split(" ");
+                String[] parts = line.split("\s+");
                 float radius = Float.parseFloat(parts[0]);
                 int particleId = lineNumber - 2;
                 propertiesMap.put(particleId, new Properties(radius, parts[1]));
