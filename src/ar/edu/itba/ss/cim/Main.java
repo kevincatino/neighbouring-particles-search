@@ -27,7 +27,7 @@ public class Main {
             System.out.println(b);
             System.out.println("Neighbours");
             long start = System.currentTimeMillis();
-            System.out.println(b.getNeighbours(Board.METHOD.CIM));
+            System.out.println(b.getNeighbours(Board.METHOD.BRUTE_FORCE));
             long end = System.currentTimeMillis();
             System.out.printf("Computation time: %d ms\n",(end-start));
         }
