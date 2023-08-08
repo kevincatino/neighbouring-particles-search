@@ -157,7 +157,7 @@ public class Board {
     }
 
 
-    public Map<Particle, Set<Particle>> getNeighbours(METHOD method) {
+    public Map<Particle, Set<Particle>> getNeighbours(METHOD method, BOUNDARY_CONDITIONS boundaryConditions) {
         clearNeighbours();
         Map<Particle, Set<Particle>> neighbours = new HashMap<>();
         switch(method) {
@@ -180,7 +180,7 @@ public class Board {
             case BRUTE_FORCE:
                 for (Particle particle : boardParticles) {
                     for (Particle otherParticle : boardParticles) {
-                        if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle,interactionRadius)) {
+                        if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius, boundaryConditions)) {
                             particle.addNeighbour(otherParticle);
                             otherParticle.addNeighbour(particle);
                         }
@@ -199,6 +199,38 @@ public class Board {
     public enum METHOD {
         BRUTE_FORCE,
         CIM
+    }
+
+    public enum BOUNDARY_CONDITIONS {
+        PERIODIC(){
+            @Override
+            public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius) {
+                if(super.isWithinInteractionMethod(particle1, particle2, interactionRadius)){
+                    return true;
+                }
+
+                // VER SI SON VECINAS DE FORMA PERIODICA
+
+                return false;
+            }
+        },
+        NOT_PERIODIC(){
+            @Override
+            public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius) {
+                return super.isWithinInteractionMethod(particle1, particle2, interactionRadius);
+            }
+        };
+
+
+        public boolean isWithinInteractionMethod(Particle particle1, Particle particle2, double interactionRadius){
+            double totalDistance = particle1.getDistanceTo(particle2);
+
+            // Perhaps we should add a boolean to check if it is a point particle?
+            totalDistance -= particle1.getRadius();
+            totalDistance -= particle2.getRadius();
+
+            return totalDistance <= interactionRadius;
+        }
     }
 
 }

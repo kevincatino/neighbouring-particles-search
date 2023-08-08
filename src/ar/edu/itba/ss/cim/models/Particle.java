@@ -70,7 +70,7 @@ public class Particle {
         return coordinates.getDistanceTo(other.coordinates);
     }
 
-    public boolean isWithinInteractionRadius(Particle otherParticle, double interactionRadius) {
+    public boolean isWithinInteractionRadius(Particle otherParticle, double interactionRadius, Board.BOUNDARY_CONDITIONS boundaryConditions) {
 
         double totalDistance = getDistanceTo(otherParticle);
 
