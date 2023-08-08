@@ -8,7 +8,7 @@ public class Cell {
 
     private final Set<Particle> cellParticles = new HashSet<>();
 
-    public Set<Particle> getParticles(){
+    public Set<Particle> getParticles() {
         return this.cellParticles;
     }
 
@@ -16,14 +16,14 @@ public class Cell {
         cellParticles.clear();
     }
 
-    public void addParticle(Particle particle){
+    public void addParticle(Particle particle) {
         this.cellParticles.add(particle);
     }
 
     @Override
     public String toString() {
-        String particlesString =  cellParticles.stream().map(p -> String.format("%d",p.getId())).collect(Collectors.joining(","));
-        return String.format("[%10s]",particlesString);
+        String particlesString = cellParticles.stream().map(p -> String.format("%d", p.getId())).collect(Collectors.joining(","));
+        return String.format("[%10s]", particlesString);
 
     }
 

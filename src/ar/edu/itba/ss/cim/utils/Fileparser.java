@@ -7,12 +7,7 @@ import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public interface Fileparser {
     static List<TemporalCoordinates> parseDynamicFile(String filePath) throws IOException {
@@ -28,7 +23,7 @@ public interface Fileparser {
         TemporalCoordinates tc = null;
         Integer idCounter = null;
 
-        while ((scanner.hasNextLine() &&  (line = scanner.nextLine()) != null)) {
+        while ((scanner.hasNextLine() && (line = scanner.nextLine()) != null)) {
 
             if (line.contains(" ")) {
                 if (idCounter == null || tc == null) {
@@ -37,11 +32,11 @@ public interface Fileparser {
                 String[] parts = line.split(" ");
                 double x = Double.parseDouble(parts[0]);
                 double y = Double.parseDouble(parts[1]);
-                tc.addCoordinates(idCounter++, Coordinates.of(x,y));
+                tc.addCoordinates(idCounter++, Coordinates.of(x, y));
             } else {
                 currentTime = Integer.parseInt(line);
                 idCounter = 1;
-               tc = new TemporalCoordinates(currentTime);
+                tc = new TemporalCoordinates(currentTime);
                 timeData.add(currentTime, tc);
             }
         }
@@ -64,7 +59,7 @@ public interface Fileparser {
         double length = 0;
         int lineNumber = 0;
 
-        while ((scanner.hasNextLine() &&  (line = scanner.nextLine()) != null)) {
+        while ((scanner.hasNextLine() && (line = scanner.nextLine()) != null)) {
             lineNumber++;
 
             if (lineNumber == 1) {
@@ -74,8 +69,8 @@ public interface Fileparser {
             } else {
                 String[] parts = line.split(" ");
                 float radius = Float.parseFloat(parts[0]);
-                int particleId = lineNumber-2;
-                propertiesMap.put(particleId,new Properties(radius, parts[1]));
+                int particleId = lineNumber - 2;
+                propertiesMap.put(particleId, new Properties(radius, parts[1]));
             }
         }
 

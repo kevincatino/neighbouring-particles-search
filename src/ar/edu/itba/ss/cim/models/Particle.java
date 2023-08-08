@@ -1,9 +1,7 @@
 package ar.edu.itba.ss.cim.models;
 
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -20,7 +18,7 @@ public class Particle {
     private final Properties properties;
 
     Particle(double x, double y, Properties properties) {
-        this(Coordinates.of(x,y), properties);
+        this(Coordinates.of(x, y), properties);
     }
 
     Particle(Coordinates coordinates, Properties properties) {
@@ -31,7 +29,7 @@ public class Particle {
         this.neighbours = new HashSet<>();
     }
 
-    public int getId(){
+    public int getId() {
         return this.id;
     }
 
@@ -43,11 +41,11 @@ public class Particle {
         return properties.getRadius();
     }
 
-    public double getX(){
+    public double getX() {
         return this.coordinates.getX();
     }
 
-    public double getY(){
+    public double getY() {
         return this.coordinates.getY();
     }
 
@@ -78,13 +76,14 @@ public class Particle {
         return neighbours.stream().anyMatch(neighbour -> neighbour.getId() == particleId);
     }
 
-    public void addNeighbour(Particle particle){
+    public void addNeighbour(Particle particle) {
         this.neighbours.add(particle);
     }
 
-    public void clearNeighbour(){
+    public void clearNeighbour() {
         this.neighbours.clear();
     }
+
     public Set<Particle> getNeighbours() {
         return neighbours;
     }
@@ -94,19 +93,18 @@ public class Particle {
         return Objects.hash(id);
     }
 
-    public boolean equals(Object o ) {
-        if(this == o) {
+    public boolean equals(Object o) {
+        if (this == o) {
             return true;
         }
-        if (!(o instanceof Particle)) {
+        if (!(o instanceof Particle aux)) {
             return false;
         }
-        Particle aux = (Particle) o;
         return this.id == aux.id;
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         return "{id: " + id + ", x: " + getX() + ", y: " + getY() + " radius: " + getRadius() + "}";
     }

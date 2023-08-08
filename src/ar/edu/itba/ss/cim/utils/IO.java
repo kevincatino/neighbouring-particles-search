@@ -6,11 +6,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public interface IO {
-   static String readFile(String path) throws IOException {
-       Path filePath = Paths.get(path);
-       String content;
-       content = Files.readString(filePath);
+    static String readFile(String path) throws IOException {
+        Path filePath = Paths.get(path);
+        String content;
+        content = Files.readString(filePath);
 
-       return content;
+        return content;
     }
 }
