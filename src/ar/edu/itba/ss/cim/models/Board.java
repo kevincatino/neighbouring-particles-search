@@ -3,7 +3,10 @@ package ar.edu.itba.ss.cim.models;
 
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.IntStream;
 
@@ -12,9 +15,13 @@ public class Board {
     private final int M;
     private final Cell[][] cells;
 
+    private final Set<Particle> particles = new HashSet<>();
+
 
     private final double boardLength;
     private final double cellLength;
+
+    private final double interactionRadius;
 
     public int getTime() {
         return time;
@@ -44,9 +51,10 @@ public class Board {
                 '}';
     }
 
-    public Board(int M, double boardLength, int time){
+    public Board(int M, double boardLength, int time, double interactionRadius){
         this.time = time;
         this.M = M;
+        this.interactionRadius = interactionRadius;
         this.boardLength = boardLength;
         this.cellLength = boardLength/ (double) M;
         this.cells = new Cell[M][M];
@@ -73,10 +81,6 @@ public class Board {
     }
 
     public Set<Particle> getAllParticles(){
-        Set<Particle> particles = new HashSet<>();
-        IntStream.range(0, M)
-                .forEach(i -> IntStream.range(0, M)
-                        .forEach(j -> particles.addAll(cells[i][j].getParticles())));
         return particles;
     }
     public double getBoardLength() {
@@ -92,6 +96,59 @@ public class Board {
          int row = (int) ( x / cellLength);
          int col= (int) (y / cellLength);
         this.cells[row][col].addParticle(particle);
+    }
+
+    public void addParticles(Collection<Particle> particles) {
+        for (Particle particle : particles) {
+            addParticle(particle);
+        }
+        this.particles.addAll(particles);
+    }
+
+    public void computeNeighbours(Cell cell1, Cell cell2) {
+        Set<Particle> cell1Particles = cell1.getParticles();
+        Set<Particle> cell2Particles = cell2.getParticles();
+        for (Particle particle : cell1Particles) {
+            for (Particle otherParticle : cell2Particles) {
+                if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle, interactionRadius)) {
+                    particle.addNeighbour(otherParticle);
+                    otherParticle.addNeighbour(particle);
+                }
+            }
+        }
+    }
+
+    public Set<Cell> getNeighbourCells(Cell cell) {
+        Set<Cell> neighbourCells = new HashSet<>();
+
+        // Calculate neighbour cells and add to set
+
+        return neighbourCells;
+    }
+
+    public Map<Particle,Set<Particle>> getNeighbours() {
+        Map<Particle,Set<Particle>> neighbours = new HashMap<>();
+        Set<Pair<Cell>> comparedCells = new HashSet<>();
+        for (int i=0 ; i< M ; i++) {
+            for (int j=0 ; j<M ; j++) {
+                Cell cell = cells[i][j];
+                Set<Cell> neighbourCells = getNeighbourCells(cell);
+                for (Cell otherCell : neighbourCells) {
+                    Pair<Cell> pair = Pair.of(cell, otherCell);
+                    if(!comparedCells.contains(pair)) {
+                        comparedCells.add(pair);
+                        computeNeighbours(cell, otherCell);
+                    }
+                }
+            }
+        }
+
+        for (Particle particle : particles) {
+            neighbours.put(particle,particle.getNeighbours());
+        }
+
+        return neighbours;
+
     }
 
 }

@@ -1,7 +1,5 @@
 package ar.edu.itba.ss.cim.models;
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +16,12 @@ public class BoardSequence implements Iterable<Board>{
 
     private int index;
 
-    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M) {
+    private double interactionRadius;
+
+    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M, double interactionRadius) {
         this.temporalCoordinatesList = temporalCoordinatesList;
         this.staticStats = staticStats;
+        this.interactionRadius = interactionRadius;
         this.M = M;
 
         Coordinates coordinates = Coordinates.of(0,0);
@@ -33,7 +34,7 @@ public class BoardSequence implements Iterable<Board>{
 
     private Board getNextBoard() {
         TemporalCoordinates tc = temporalCoordinatesList.get(index++);
-        Board board = new Board(M,staticStats.getBoardLength(),tc.getTime());
+        Board board = new Board(M,staticStats.getBoardLength(),tc.getTime(), interactionRadius);
         for (Particle particle : particles) {
             int id = particle.getId();
             Coordinates coordinates = tc.getCoordinates(id);

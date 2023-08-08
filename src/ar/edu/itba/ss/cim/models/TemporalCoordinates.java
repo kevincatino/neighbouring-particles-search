@@ -1,11 +1,7 @@
 package ar.edu.itba.ss.cim.models;
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TemporalCoordinates {
     private final Map<Integer,Coordinates> coordinatesById = new HashMap<>();

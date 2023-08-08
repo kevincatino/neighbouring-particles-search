@@ -1,10 +1,11 @@
 package ar.edu.itba.ss.cim.models;
 
 
-import ar.edu.itba.ss.cim.Coordinates;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 public class Particle {
 
@@ -14,7 +15,7 @@ public class Particle {
     private final int id;
     private Coordinates coordinates;
 
-    private final List<Particle> neighbours;
+    private final Set<Particle> neighbours;
 
     private final Properties properties;
 
@@ -27,7 +28,7 @@ public class Particle {
         ID++;
         this.properties = properties;
         this.coordinates = coordinates;
-        this.neighbours = new ArrayList<>();
+        this.neighbours = new HashSet<>();
     }
 
     public int getId(){
@@ -50,14 +51,21 @@ public class Particle {
         return this.coordinates.getY();
     }
 
+    public Coordinates getCoordinates() {
+        return coordinates;
+    }
+
     public boolean isNeighbourOf(int particleId) {
         return neighbours.stream().anyMatch(neighbour -> neighbour.getId() == particleId);
     }
 
+    public double getDistanceTo(Particle other) {
+        return coordinates.getDistanceTo(other.coordinates);
+    }
+
     public boolean isWithinInteractionRadius(Particle otherParticle, double interactionRadius) {
-        double horizontalDistance  = Math.abs(this.coordinates.getX() - otherParticle.getX());
-        double verticalDistance = Math.abs(this.coordinates.getY() - otherParticle.getY());
-        double totalDistance = Math.sqrt(Math.pow(horizontalDistance, 2) + Math.pow(verticalDistance, 2));
+
+        double totalDistance = getDistanceTo(otherParticle);
 
         // Perhaps we should add a boolean to check if it is a point particle?
         totalDistance -= this.properties.getRadius();
@@ -77,9 +85,13 @@ public class Particle {
     public void clearNeighbour(){
         this.neighbours.clear();
     }
-
-    public List<Particle> getNeighbours() {
+    public Set<Particle> getNeighbours() {
         return neighbours;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public boolean equals(Object o ) {

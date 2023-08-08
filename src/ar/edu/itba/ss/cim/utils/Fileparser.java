@@ -1,7 +1,7 @@
 package ar.edu.itba.ss.cim.utils;
 
 
-import ar.edu.itba.ss.cim.Coordinates;
+import ar.edu.itba.ss.cim.models.Coordinates;
 import ar.edu.itba.ss.cim.models.Properties;
 import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
@@ -10,11 +10,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 
 public interface Fileparser {
     static List<TemporalCoordinates> parseDynamicFile(String filePath) throws IOException {
@@ -39,7 +37,7 @@ public interface Fileparser {
                 String[] parts = line.split(" ");
                 double x = Double.parseDouble(parts[0]);
                 double y = Double.parseDouble(parts[1]);
-                tc.addCoordinates(idCounter++,Coordinates.of(x,y));
+                tc.addCoordinates(idCounter++, Coordinates.of(x,y));
             } else {
                 currentTime = Integer.parseInt(line);
                 idCounter = 1;
