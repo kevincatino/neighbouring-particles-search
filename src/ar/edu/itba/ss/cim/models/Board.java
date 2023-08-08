@@ -45,6 +45,7 @@ public class Board {
                 ", boardLength=" + boardLength +
                 ", cellLength=" + cellLength +
                 ", time=" + time +
+                ", interactionRadius=" + interactionRadius +
                 ",\n cells=\n" + board +
                 '}';
     }
@@ -63,7 +64,7 @@ public class Board {
         }
     }
 
-    public Cell getCell(int i, int j){
+    private Cell getCell(int i, int j){
         return this.cells[i][j];
     }
 
@@ -137,11 +138,11 @@ public class Board {
         }
     }
 
-    public Collection<Cell> getNeighbourCells(int i, int j) {
+    private Collection<Cell> getNeighbourCells(int i, int j) {
 
         Set<Cell> neighbourCells = new HashSet<>();
         for (int x=i-1 ; x <= i+1 ; x++) {
-            for (int y=j-1 ; j <= y+1 ; y++) {
+            for (int y=j-1 ; y <= j+1 ; y++) {
                if (x >=0 && x < M && y >= 0 && y < M) {
                    neighbourCells.add(cells[x][y]);
                }

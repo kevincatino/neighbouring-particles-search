@@ -18,7 +18,7 @@ public class Coordinates {
     }
 
     public String toString() {
-        return String.format("{%f,%f}", x, y);
+        return String.format("{%3.2f,%3.2f}", x, y);
     }
 
     public double getX() {

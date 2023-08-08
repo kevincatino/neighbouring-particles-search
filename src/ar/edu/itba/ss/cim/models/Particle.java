@@ -19,6 +19,14 @@ public class Particle {
 
     private final Properties properties;
 
+    @Override
+    public String toString() {
+        return "{" +
+                "id=" + id +
+                ", " + coordinates +
+                '}';
+    }
+
     Particle(double x, double y, Properties properties) {
         this(Coordinates.of(x,y), properties);
     }
@@ -105,10 +113,5 @@ public class Particle {
         return this.id == aux.id;
     }
 
-    @Override
-    public String toString(){
-
-        return "{id: " + id + ", x: " + getX() + ", y: " + getY() + " radius: " + getRadius() + "}";
-    }
 
 }
