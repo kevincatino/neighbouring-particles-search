@@ -163,24 +163,24 @@ public class Board {
         switch(method) {
             case CIM:
                 Set<Pair<Cell>> comparedCells = new HashSet<>();
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < M; j++) {
-                Cell cell = cells[i][j];
-                Collection<Cell> neighbourCells = getNeighbourCells(i, j);
-                for (Cell otherCell : neighbourCells) {
-                    Pair<Cell> pair = Pair.of(cell, otherCell);
-                    if (!comparedCells.contains(pair)) {
-                        comparedCells.add(pair);
-                        computeNeighbours(cell, otherCell);
+                for (int i = 0; i < M; i++) {
+                    for (int j = 0; j < M; j++) {
+                        Cell cell = cells[i][j];
+                        Collection<Cell> neighbourCells = getNeighbourCells(i, j);
+                        for (Cell otherCell : neighbourCells) {
+                            Pair<Cell> pair = Pair.of(cell, otherCell);
+                            if (!comparedCells.contains(pair)) {
+                                comparedCells.add(pair);
+                                computeNeighbours(cell, otherCell);
+                            }
+                        }
                     }
                 }
-            }
-        }
-        break;
+                break;
             case BRUTE_FORCE:
                 for (Particle particle : boardParticles) {
                     for (Particle otherParticle : boardParticles) {
-                        if (particle.isWithinInteractionRadius(otherParticle,interactionRadius)) {
+                        if (!particle.equals(otherParticle) && particle.isWithinInteractionRadius(otherParticle,interactionRadius)) {
                             particle.addNeighbour(otherParticle);
                             otherParticle.addNeighbour(particle);
                         }

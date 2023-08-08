@@ -21,6 +21,7 @@ public class Particle {
     public String toString() {
         return "{" +
                 "id=" + id +
+                ", r=" + properties.getRadius() + " " +
                 ", " + coordinates +
                 '}';
     }
