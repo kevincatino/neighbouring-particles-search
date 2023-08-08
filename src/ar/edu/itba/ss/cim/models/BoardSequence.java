@@ -7,22 +7,19 @@ import java.util.Map;
 import java.util.Set;
 
 public class BoardSequence implements Iterable<Board>{
-    private List<TemporalCoordinates> temporalCoordinatesList;
-    private StaticStats staticStats;
+    private final List<TemporalCoordinates> temporalCoordinatesList;
 
-    private final int M;
 
-    private Set<Particle> particles = new HashSet<>();
+    private final Set<Particle> particles = new HashSet<>();
 
     private int index;
 
-    private double interactionRadius;
+
+    private final Board board;
 
     public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M, double interactionRadius) {
         this.temporalCoordinatesList = temporalCoordinatesList;
-        this.staticStats = staticStats;
-        this.interactionRadius = interactionRadius;
-        this.M = M;
+        board = new Board(M, staticStats.getBoardLength(), interactionRadius);
 
         Coordinates coordinates = Coordinates.of(0,0);
         for (Map.Entry<Integer,Properties> idProp : staticStats.getIdPropertyPairs()) {
@@ -30,17 +27,18 @@ public class BoardSequence implements Iterable<Board>{
             Particle particle = new Particle(coordinates,properties);
             particles.add(particle);
         }
+        board.addParticles(particles);
     }
 
     private Board getNextBoard() {
         TemporalCoordinates tc = temporalCoordinatesList.get(index++);
-        Board board = new Board(M,staticStats.getBoardLength(),tc.getTime(), interactionRadius);
+        board.setTime(tc.getTime());
         for (Particle particle : particles) {
             int id = particle.getId();
             Coordinates coordinates = tc.getCoordinates(id);
             particle.setCoordinates(coordinates);
-            board.addParticle(particle);
         }
+        board.recomputeParticlesCell();
         return board;
     }
 

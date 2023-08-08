@@ -6,20 +6,23 @@ import java.util.stream.Collectors;
 
 public class Cell {
 
-    private final Set<Particle> particles = new HashSet<>();
-
+    private final Set<Particle> cellParticles = new HashSet<>();
 
     public Set<Particle> getParticles(){
-        return this.particles;
+        return this.cellParticles;
+    }
+
+    public void clearCell() {
+        cellParticles.clear();
     }
 
     public void addParticle(Particle particle){
-        this.particles.add(particle);
+        this.cellParticles.add(particle);
     }
 
     @Override
     public String toString() {
-        String particlesString =  particles.stream().map(p -> String.format("%d",p.getId())).collect(Collectors.joining(","));
+        String particlesString =  cellParticles.stream().map(p -> String.format("%d",p.getId())).collect(Collectors.joining(","));
         return String.format("[%10s]",particlesString);
 
     }
