@@ -44,6 +44,8 @@ public class BoardSequence implements Iterable<Board> {
         return board.getM();
     }
 
+
+
     private Board getNextBoard() {
         TemporalCoordinates tc = temporalCoordinatesList.get(index++);
         board.setTime(tc.getTime());
@@ -75,6 +77,9 @@ public class BoardSequence implements Iterable<Board> {
 
             @Override
             public Board next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 return getNextBoard();
             }
         };

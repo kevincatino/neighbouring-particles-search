@@ -10,7 +10,7 @@ public class Particle {
 
     private static int ID = 1;
 
-    private int id;
+    private final int id;
     private Coordinates coordinates;
 
     private final Set<Particle> neighbours;
@@ -52,6 +52,10 @@ public class Particle {
 
     public double getX() {
         return this.coordinates.getX();
+    }
+
+    public static void resetIdCounter() {
+        ID = 1;
     }
 
     public double getY() {

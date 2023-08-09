@@ -49,9 +49,9 @@ public interface Fileparser {
         return timeData;
     }
 
-    static FileNamesWrapper generateInputData(int M, double boardLength, double interactionLength, int intervals) throws IOException {
+    static FileNamesWrapper generateInputData(int numberOfParticles, int M, double boardLength, double interactionLength, int intervals) throws IOException {
         String ts = Instant.now().toString();
-        FileNamesWrapper fileNames = new FileNamesWrapper("static" + ts, "dynamic" + ts);
+        FileNamesWrapper fileNames = new FileNamesWrapper("static" , "dynamic" );
         FileWriter writer = new FileWriter(fileNames.DynamicFileName);
             BufferedWriter dynamicFileBuffer = new BufferedWriter(writer);
             Random rand = new Random();
