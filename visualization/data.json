@@ -5,7 +5,12 @@
     {
       "time": 0,
       "particles":  [
+<<<<<<< HEAD
+        {"id": 1, "coordinates": [0,0], "radius": 1, "neighbours": [{"id": 2, "coordinates": [1,1], "radius": 1}]},
+        {"id": 3, "coordinates": [2,2], "radius": 2, "neighbours": [{"id": 2, "coordinates": [1,1], "radius": 1}]}]
+=======
         {"id": 1, "coordinates": {"x":0,"y":0}, "radius": 1, "neighbours": [{"id": 2, "coordinates": {"x":1,"y":1}, "radius": 1}]},
         {"id": 3, "coordinates": {"x":2,"y":2}, "radius": 2, "neighbours": [{"id": 2, "coordinates": {"x":1,"y":1}, "radius": 1}]}]
+>>>>>>> b0cf7f4ecf5e7323b90cd5b950d8d18d6f801a38
     }]
  }
