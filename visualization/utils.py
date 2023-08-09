@@ -31,3 +31,21 @@ def parse_json():
         board_list.append(models.Board(L, M, rc, time['time'], particles))
 
     return board_list
+
+
+def parse_time_json():
+    # Opening JSON file
+    f = open('time.json')
+
+    # returns JSON object as
+    # a dictionary
+    json_input = json.load(f)
+
+    time_measures = models.TimeMeasures()
+
+    for t in json_input:
+        time_measures.particles_count.append(t['Particles'])
+        time_measures.bf_times.append(t['bruteForce'])
+        time_measures.cim_times.append(t['CIM'])
+
+    return time_measures

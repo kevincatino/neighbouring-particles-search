@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
-from visualization.models import Board
+from visualization.models import Board, TimeMeasures
 
 
 def plot_particles_in_board(board: Board):
@@ -65,4 +65,18 @@ def plot_particles_in_board(board: Board):
     ax.set_ylabel('Y')
     ax.set_title('Particle Distribution for time ' + str(board.time))
 
+    plt.show()
+
+
+def plot_times(time_measures: TimeMeasures):
+    fig, ax = plt.subplots()
+
+    ax.plot(time_measures.particles_count, time_measures.bf_times, label='Brute force')
+    ax.plot(time_measures.particles_count, time_measures.cim_times, label='CIM')
+
+    ax.set_xlabel('Particles')
+    ax.set_ylabel('Time [ms]')
+    ax.set_title('Brute force vs CIM method')
+    ax.grid(True)
+    plt.legend()
     plt.show()
