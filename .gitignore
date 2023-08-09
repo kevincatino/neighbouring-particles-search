@@ -1,5 +1,7 @@
 .idea
 neighbouring-particles-search.iml
+venv
+visualization/__pycache__/
 
 # Compiled class file
 *.class
