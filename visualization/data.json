@@ -1,9 +1,11 @@
  {
-   "L": 5, "M": 1,
+   "L": 8, "M": 4,
   "rc": 2,
   "data": [
     {
       "time": 0,
-      "particles":  [{"id": 1, "coordinates": [0,0], "radius": 1, "neighbours": [{"id": 2, "coordinates": [1,1], "radius": 1}]}]
+      "particles":  [
+        {"id": 1, "coordinates": {"x":0,"y":0}, "radius": 1, "neighbours": [{"id": 2, "coordinates": {"x":1,"y":1}, "radius": 1}]},
+        {"id": 3, "coordinates": {"x":2,"y":2}, "radius": 2, "neighbours": [{"id": 2, "coordinates": {"x":1,"y":1}, "radius": 1}]}]
     }]
  }

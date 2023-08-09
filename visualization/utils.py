@@ -23,9 +23,9 @@ def parse_json():
     for time in data:
         particles = []
         for part in time['particles']:
-            obj_particle = models.Particle(part['id'], part['coordinates'][0], part['coordinates'][1], part['radius'])
+            obj_particle = models.Particle(part['id'], part['coordinates']['x'], part['coordinates']['y'], part['radius'])
             for n in part['neighbours']:
-                neighbour = models.Particle(part['id'], part['coordinates'][0], part['coordinates'][1], part['radius'])
+                neighbour = models.Particle(part['id'], part['coordinates']['x'], part['coordinates']['y'], part['radius'])
                 obj_particle.neighbours.append(neighbour)
             particles.append(obj_particle)
         board_list.append(models.Board(L, M, rc, time['time'], particles))
