@@ -19,7 +19,8 @@ public class Pair<T> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Pair<?> pair)) return false;
-        return value1.equals(pair.value1);
+        return (value1.equals(pair.value1) && value2.equals(pair.value2)) || (value1.equals(pair.value2) && value2.equals(pair.value1));
+
     }
 
     @Override
