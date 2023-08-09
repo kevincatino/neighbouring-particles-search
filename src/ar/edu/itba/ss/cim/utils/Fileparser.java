@@ -50,14 +50,14 @@ public interface Fileparser {
     }
 
     static FileNamesWrapper generateInputData(int numberOfParticles, int M, double boardLength, double interactionLength, int intervals) throws IOException {
-        String ts = Instant.now().toString();
         FileNamesWrapper fileNames = new FileNamesWrapper("static" , "dynamic" );
         FileWriter writer = new FileWriter(fileNames.DynamicFileName);
+
+        Random rand = new Random();
             BufferedWriter dynamicFileBuffer = new BufferedWriter(writer);
-            Random rand = new Random();
         for (int time=0 ; time<intervals ; time++) {
             dynamicFileBuffer.write(String.format("%d\n",time));
-            for (int i=0 ; i<M ; i++) {
+            for (int i=0 ; i<numberOfParticles ; i++) {
 
                double x = rand.nextDouble(boardLength);
                 double y = rand.nextDouble(boardLength);
@@ -66,6 +66,16 @@ public interface Fileparser {
         }
 
         dynamicFileBuffer.close();
+
+        writer = new FileWriter(fileNames.StaticFileName);
+            BufferedWriter staticFileBuffer = new BufferedWriter(writer);
+            staticFileBuffer.write(String.format("%d\n%f\n",numberOfParticles,boardLength));
+            for (int i=0 ; i<numberOfParticles ; i++) {
+               double r = rand.nextDouble(boardLength/10);
+                staticFileBuffer.write(String.format("%f\n",r));
+            }
+
+        staticFileBuffer.close();
         // TODO generar archivo estatico
         return fileNames;
 
@@ -96,7 +106,7 @@ public interface Fileparser {
                 String[] parts = line.split("\s+");
                 float radius = Float.parseFloat(parts[0]);
                 int particleId = lineNumber - 2;
-                propertiesMap.put(particleId, new Properties(radius, parts[1]));
+                propertiesMap.put(particleId, new Properties(radius, parts.length > 1 ? parts[1]: ""));
             }
         }
 

@@ -24,14 +24,16 @@ public class Main {
         int numberOfSimulations = 2;
         int M = 4;
         int timeValues = 3;
-        int numberOfParticles = 5;
+        int numberOfParticles = 100;
         double interactionRadius = 5;
         double boardLength = 10;
         ExecutionStatsWrapper stats = new ExecutionStatsWrapper();
         for (int i = 0; i < numberOfSimulations; i++) {
-            String STATIC_FILE_PATH = "static.txt";
-            String DYNAMIC_FILE_PATH = "dynamic.txt";
+
             FileNamesWrapper fileNameWrapper = Fileparser.generateInputData(numberOfParticles, M, boardLength, interactionRadius, timeValues);
+
+            String STATIC_FILE_PATH = fileNameWrapper.StaticFileName;
+            String DYNAMIC_FILE_PATH = fileNameWrapper.DynamicFileName;
             StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
             List<TemporalCoordinates> temporalCoordinates = Fileparser.parseDynamicFile(DYNAMIC_FILE_PATH);
             BoardSequence boardSequence = new BoardSequence(staticStats, temporalCoordinates, M, interactionRadius, Board.BoundaryConditions.PERIODIC);
@@ -58,6 +60,8 @@ public class Main {
 
             Particle.resetIdCounter();
         }
+
+        stats.writeToFile("stats.json");
 
 
     }

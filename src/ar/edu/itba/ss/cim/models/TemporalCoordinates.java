@@ -15,6 +15,10 @@ public class TemporalCoordinates {
         coordinatesById.put(particleId, coordinates);
     }
 
+    public int getCoordinatesCount() {
+        return coordinatesById.size();
+    }
+
     public Coordinates getCoordinates(int particleId) {
         return coordinatesById.get(particleId);
     }

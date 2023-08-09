@@ -33,6 +33,7 @@ public class Board {
 
     private final BoundaryConditions boundaryConditions;
 
+
     @Override
     public String toString() {
         StringBuilder board = new StringBuilder();
@@ -72,6 +73,20 @@ public class Board {
             }
         }
     }
+
+    public static int computeOptimalM(double boardLength, double interactionRadius, Collection<Particle> particles) {
+        Iterator<Particle> it = particles.iterator();
+        double maxRadius = it.next().getRadius();
+
+        while (it.hasNext()) {
+            double radius = it.next().getRadius();
+            maxRadius = radius > maxRadius ? radius : maxRadius;
+        }
+
+        return (int) Math.floor(boardLength/(interactionRadius + maxRadius*2));
+    }
+
+
 
 
     private void clearCells() {

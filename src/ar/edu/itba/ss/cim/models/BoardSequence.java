@@ -1,7 +1,6 @@
 package ar.edu.itba.ss.cim.models;
 
 import ar.edu.itba.ss.cim.dto.BoardSequenceDto;
-import ar.edu.itba.ss.cim.dto.BoardStateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.File;
@@ -19,16 +18,24 @@ public class BoardSequence implements Iterable<Board> {
 
     private final Board board;
 
-    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, int M, double interactionRadius, Board.BoundaryConditions boundaryConditions) {
+    // If M is null, then the optimal value of M is utilized
+    public BoardSequence(StaticStats staticStats, List<TemporalCoordinates> temporalCoordinatesList, Integer M, double interactionRadius, Board.BoundaryConditions boundaryConditions) {
         this.temporalCoordinatesList = temporalCoordinatesList;
-        board = new Board(M, staticStats.getBoardLength(), interactionRadius, boundaryConditions);
-
         Coordinates coordinates = Coordinates.of(0, 0);
         for (Map.Entry<Integer, Properties> idProp : staticStats.getIdPropertyPairs()) {
             Properties properties = idProp.getValue();
             Particle particle = new Particle(coordinates, properties);
             particles.add(particle);
         }
+        if (M == null) {
+            M = Board.computeOptimalM(staticStats.getBoardLength(),interactionRadius,particles);
+        }
+        if (staticStats.getParticlesQty() != temporalCoordinatesList.get(0).getCoordinatesCount()) {
+            throw new RuntimeException("Number of particles in static stats and coordinates of temporal coordinates should match");
+        }
+        board = new Board(M, staticStats.getBoardLength(), interactionRadius, boundaryConditions);
+
+
         board.addParticles(particles);
     }
 
