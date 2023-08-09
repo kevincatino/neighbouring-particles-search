@@ -1,0 +1,9 @@
+ {
+   "L": 5, "M": 1,
+  "rc": 2,
+  "data": [
+    {
+      "time": 0,
+      "particles":  [{"id": 1, "coordinates": [0,0], "radius": 1, "neighbours": [{"id": 2, "coordinates": [1,1], "radius": 1}]}]
+    }]
+ }
