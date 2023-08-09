@@ -7,6 +7,9 @@ import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
 import ar.edu.itba.ss.cim.utils.Fileparser;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
        String STATIC_FILE_PATH = "static.txt";
        String DYNAMIC_FILE_PATH = "dynamic.txt";
+       Fileparser.generateInputData(5,5,2,3);
        int M = 4;
        double interactionRadius = 5;
        StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
@@ -31,5 +35,8 @@ public class Main {
             long end = System.currentTimeMillis();
             System.out.printf("Computation time: %d ms\n",(end-start));
         }
+
+        boardSequence.writeToFile("people.json");
+
     }
 }

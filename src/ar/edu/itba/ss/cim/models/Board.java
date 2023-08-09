@@ -2,6 +2,7 @@ package ar.edu.itba.ss.cim.models;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -14,16 +15,23 @@ public class Board {
     private final double cellLength;
 
 
+    public double getInteractionRadius() {
+        return interactionRadius;
+    }
+
     private final double interactionRadius;
 
     public int getTime() {
         return time;
     }
 
+
     private int time = 0;
     private final InteractionRadiusComputer interactionRadiusComputer;
 
     private final NeighbourCellsComputer neighbourCellsComputer;
+
+    private final BoundaryConditions boundaryConditions;
 
     @Override
     public String toString() {
@@ -54,6 +62,7 @@ public class Board {
         this.boardLength = boardLength;
         this.cellLength = boardLength / (double) M;
         this.cells = new Cell[M][M];
+        this.boundaryConditions = boundaryConditions;
         this.neighbourCellsComputer = boundaryConditions.getNeighbourCellsComputer();
         this.interactionRadiusComputer = boundaryConditions.getInteractionRadiusComputer(boardLength, interactionRadius);
 
@@ -64,10 +73,6 @@ public class Board {
         }
     }
 
-    private Cell getCell(int i, int j) {
-
-        return this.cells[i][j];
-    }
 
     private void clearCells() {
         for (int i = 0; i < M; i++) {
@@ -85,9 +90,7 @@ public class Board {
         this.time = time;
     }
 
-    public Set<Particle> getParticlesAt(int row, int col) {
-        return this.cells[row][col].getParticles();
-    }
+
 
     public Set<Particle> getAllParticles() {
         return boardParticles;

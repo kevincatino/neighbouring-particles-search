@@ -10,7 +10,7 @@ public class Particle {
 
     private static int ID = 1;
 
-    private final int id;
+    private int id;
     private Coordinates coordinates;
 
     private final Set<Particle> neighbours;

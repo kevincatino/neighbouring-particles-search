@@ -1,5 +1,11 @@
 package ar.edu.itba.ss.cim.models;
 
+import ar.edu.itba.ss.cim.dto.BoardSequenceDto;
+import ar.edu.itba.ss.cim.dto.BoardStateDto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class BoardSequence implements Iterable<Board> {
@@ -26,6 +32,18 @@ public class BoardSequence implements Iterable<Board> {
         board.addParticles(particles);
     }
 
+    public double getBoardLength() {
+        return board.getBoardLength();
+    }
+
+    public double getInteractionRadius() {
+        return board.getInteractionRadius();
+    }
+
+    public int getM() {
+        return board.getM();
+    }
+
     private Board getNextBoard() {
         TemporalCoordinates tc = temporalCoordinatesList.get(index++);
         board.setTime(tc.getTime());
@@ -38,8 +56,17 @@ public class BoardSequence implements Iterable<Board> {
         return board;
     }
 
+    public void writeToFile(String path) throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.writeValue(new File(path), BoardSequenceDto.from(this));
+
+    }
+
+
     @Override
     public Iterator<Board> iterator() {
+        index = 0;
         return new Iterator<Board>() {
             @Override
             public boolean hasNext() {

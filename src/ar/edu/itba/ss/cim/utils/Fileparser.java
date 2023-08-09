@@ -1,12 +1,16 @@
 package ar.edu.itba.ss.cim.utils;
 
 
+import ar.edu.itba.ss.cim.helper.FileNamesWrapper;
 import ar.edu.itba.ss.cim.models.Coordinates;
 import ar.edu.itba.ss.cim.models.Properties;
 import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.*;
 
 public interface Fileparser {
@@ -43,6 +47,28 @@ public interface Fileparser {
 
         scanner.close();
         return timeData;
+    }
+
+    static FileNamesWrapper generateInputData(int M, double boardLength, double interactionLength, int intervals) throws IOException {
+        String ts = Instant.now().toString();
+        FileNamesWrapper fileNames = new FileNamesWrapper("static" + ts, "dynamic" + ts);
+        FileWriter writer = new FileWriter(fileNames.DynamicFileName);
+            BufferedWriter dynamicFileBuffer = new BufferedWriter(writer);
+            Random rand = new Random();
+        for (int time=0 ; time<intervals ; time++) {
+            dynamicFileBuffer.write(String.format("%d\n",time));
+            for (int i=0 ; i<M ; i++) {
+
+               double x = rand.nextDouble(boardLength);
+                double y = rand.nextDouble(boardLength);
+                dynamicFileBuffer.write(String.format("%f %f\n",x,y));
+            }
+        }
+
+        dynamicFileBuffer.close();
+        // TODO generar archivo estatico
+        return fileNames;
+
     }
 
 
