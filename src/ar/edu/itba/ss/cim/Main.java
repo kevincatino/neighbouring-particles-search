@@ -10,6 +10,7 @@ import ar.edu.itba.ss.cim.models.Pair;
 import ar.edu.itba.ss.cim.models.Particle;
 import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
+import ar.edu.itba.ss.cim.utils.Arguments;
 import ar.edu.itba.ss.cim.utils.Fileparser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -22,10 +23,18 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        int timeValues = 3;
-        Integer[] numberOfParticles = new Integer[]{3000,1000,500,100};
-        double interactionRadius = 2;
-        double boardLength = 10;
+        Arguments argsObj;
+        if (args.length == 0) {
+            argsObj = new Arguments(new int[]{10,100,500,1000},10,2,3);
+        } else {
+            // Ejemplo:
+            // java -jar ./neighbouring-particles-search-1.0-SNAPSHOT.jar -n 50 -n 100 -n 500 -n 1000 -l 10 -r 2.5 -t 5
+            argsObj = Arguments.parseArguments(args);
+        }
+        int timeValues = argsObj.getTimes();
+        int[] numberOfParticles = argsObj.getNumberOfParticles();
+        double interactionRadius = argsObj.getInteractionRadius();
+        double boardLength = argsObj.getBoardLength();
 
         Integer M = null;
         ExecutionStatsWrapper stats = new ExecutionStatsWrapper();
