@@ -24,4 +24,8 @@ class Board:
         return self.L / self.M
 
 
-
+class TimeMeasures:
+    def __init__(self):
+        self.particles_count = []
+        self.bf_times = []
+        self.cim_times = []
