@@ -4,27 +4,27 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from visualization.models import Board, Particle
 from visualization.plots import plot_particles_in_board, plot_times
-from visualization.utils import parse_time_json
+from visualization.utils import parse_time_json, parse_json
 
-# boards = parse_json()
+boards = parse_json()
 
-board = Board(20, 6, 1, 0,
-              [
-                  Particle(1, 2, 3, 1, [2, 3]),
-                  Particle(2, 15, 4, 3, []),
-                  Particle(3, 7, 5, 2, [2])
-              ]
-              )
+# board = Board(20, 6, 1, 0,
+#               [
+#                   Particle(1, 2, 3, 1, [2, 3]),
+#                   Particle(2, 15, 4, 3, []),
+#                   Particle(3, 7, 5, 2, [2])
+#               ]
+#               )
+#
+# board1 = Board(20, 6, 1, 1,
+#               [
+#                   Particle(1, 2, 3, 1, [2, 3]),
+#                   Particle(2, 15, 8, 3, []),
+#                   Particle(3, 7, 5, 2, [2])
+#               ]
+#               )
 
-board1 = Board(20, 6, 1, 1,
-              [
-                  Particle(1, 2, 3, 1, [2, 3]),
-                  Particle(2, 15, 8, 3, []),
-                  Particle(3, 7, 5, 2, [2])
-              ]
-              )
-
-boards = [board, board1]
+# boards = [board, board1]
 for board in boards:
     fig = plot_particles_in_board(board)
     plt.plot()

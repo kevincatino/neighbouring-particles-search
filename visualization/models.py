@@ -1,14 +1,14 @@
 
 class Particle:
-    def __init__(self, particle_id: int, x: float, y: float, radius: float, neighbours):
+    def __init__(self, particle_id: int, x: float, y: float, radius: float):
         self.id = particle_id
         self.x = x
         self.y = y
         self.radius = radius
-        self.neighbours = neighbours
+        self.neighbours = []
 
     def __str__(self):
-        return f'({self.x}, {self.y}) id = {self.id}'
+        return f'({self.x}, {self.y}) id = {self.id} n = {self.neighbours}'
 
 
 class Board:
