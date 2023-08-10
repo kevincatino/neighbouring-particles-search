@@ -6,6 +6,7 @@ import ar.edu.itba.ss.cim.helper.FileNamesWrapper;
 import ar.edu.itba.ss.cim.models.Board;
 import ar.edu.itba.ss.cim.models.BoardSequence;
 import ar.edu.itba.ss.cim.models.ExecutionStatsWrapper;
+import ar.edu.itba.ss.cim.models.Pair;
 import ar.edu.itba.ss.cim.models.Particle;
 import ar.edu.itba.ss.cim.models.StaticStats;
 import ar.edu.itba.ss.cim.models.TemporalCoordinates;
@@ -21,42 +22,41 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        int numberOfSimulations = 2;
-        int M = 4;
         int timeValues = 3;
-        int numberOfParticles = 100;
-        double interactionRadius = 5;
+        Integer[] numberOfParticles = new Integer[]{3000,1000,500,100};
+        double interactionRadius = 2;
         double boardLength = 10;
-        ExecutionStatsWrapper stats = new ExecutionStatsWrapper();
-        for (int i = 0; i < numberOfSimulations; i++) {
 
-            FileNamesWrapper fileNameWrapper = Fileparser.generateInputData(numberOfParticles, M, boardLength, interactionRadius, timeValues);
+        Integer M = null;
+        ExecutionStatsWrapper stats = new ExecutionStatsWrapper();
+        for (int particlesNumber : numberOfParticles) {
+
+
+            FileNamesWrapper fileNameWrapper = Fileparser.generateInputData(particlesNumber, boardLength, interactionRadius, timeValues);
 
             String STATIC_FILE_PATH = fileNameWrapper.StaticFileName;
             String DYNAMIC_FILE_PATH = fileNameWrapper.DynamicFileName;
             StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
             List<TemporalCoordinates> temporalCoordinates = Fileparser.parseDynamicFile(DYNAMIC_FILE_PATH);
-            BoardSequence boardSequence = new BoardSequence(staticStats, temporalCoordinates, M, interactionRadius, Board.BoundaryConditions.PERIODIC);
+            BoardSequence boardSequence = new BoardSequence(staticStats, temporalCoordinates, M, interactionRadius, Board.BoundaryConditions.NOT_PERIODIC);
 
             for (Board b : boardSequence) {
-                System.out.println(b);
-                System.out.println("CIM Neighbours");
                 long start = System.currentTimeMillis();
-                System.out.println(b.getNeighbours(Board.Method.CIM));
+                b.getNeighbours(Board.Method.BRUTE_FORCE);
                 long end = System.currentTimeMillis();
-                long cimComputationTime = end-start;
+                long bruteForceComputationTime = end - start;
+                System.out.printf("Brute force Computation time: %d ms\n", bruteForceComputationTime);
+
+                start = System.currentTimeMillis();
+                b.getNeighbours(Board.Method.CIM);
+                end = System.currentTimeMillis();
+                long cimComputationTime = end - start;
                 System.out.printf("CIM Computation time: %d ms\n", cimComputationTime);
 
-                System.out.println("Brute force Neighbours");
-                start = System.currentTimeMillis();
-                System.out.println(b.getNeighbours(Board.Method.BRUTE_FORCE));
-                end = System.currentTimeMillis();
-                long bruteForceComputationTime = end-start;
-                stats.addStats(numberOfParticles,bruteForceComputationTime,cimComputationTime);
-                System.out.printf("Brute force Computation time: %d ms\n", bruteForceComputationTime);
+                stats.addStats(particlesNumber, bruteForceComputationTime, cimComputationTime);
             }
 
-            boardSequence.writeToFile("sequence" + fileNameWrapper.TimeStamp +".json");
+            boardSequence.writeToFile("sequence" + fileNameWrapper.getId() + ".json");
 
             Particle.resetIdCounter();
         }

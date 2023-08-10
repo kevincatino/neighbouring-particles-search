@@ -49,7 +49,7 @@ public interface Fileparser {
         return timeData;
     }
 
-    static FileNamesWrapper generateInputData(int numberOfParticles, int M, double boardLength, double interactionLength, int intervals) throws IOException {
+    static FileNamesWrapper generateInputData(int numberOfParticles, double boardLength, double interactionLength, int intervals) throws IOException {
         FileNamesWrapper fileNames = new FileNamesWrapper("static" , "dynamic" );
         FileWriter writer = new FileWriter(fileNames.DynamicFileName);
 
@@ -76,7 +76,6 @@ public interface Fileparser {
             }
 
         staticFileBuffer.close();
-        // TODO generar archivo estatico
         return fileNames;
 
     }

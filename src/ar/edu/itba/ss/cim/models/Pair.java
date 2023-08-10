@@ -25,6 +25,6 @@ public class Pair<T> {
 
     @Override
     public int hashCode() {
-        return Objects.hash(value1, value2);
+        return Objects.hash(value1.hashCode() + value2.hashCode());
     }
 }
