@@ -1,6 +1,7 @@
 package ar.edu.itba.ss.cim.models;
 
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -13,7 +14,7 @@ public class Particle {
     private final int id;
     private Coordinates coordinates;
 
-    private final Set<Particle> neighbours;
+    private Set<Particle> neighbours;
 
     private final Properties properties;
 
@@ -85,7 +86,7 @@ public class Particle {
     }
 
     public void clearNeighbours() {
-        this.neighbours.clear();
+        neighbours = new HashSet<>();
     }
 
     public Set<Particle> getNeighbours() {

@@ -80,7 +80,7 @@ public class Board {
 
         while (it.hasNext()) {
             double radius = it.next().getRadius();
-            maxRadius = radius > maxRadius ? radius : maxRadius;
+            maxRadius = Math.max(radius, maxRadius);
         }
 
         return (int) Math.floor(boardLength/(interactionRadius + maxRadius*2));

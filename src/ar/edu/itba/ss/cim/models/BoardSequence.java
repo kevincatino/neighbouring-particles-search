@@ -62,6 +62,7 @@ public class BoardSequence implements Iterable<Board> {
             particle.setCoordinates(coordinates);
         }
         board.recomputeParticlesCell();
+        board.getNeighbours(Board.Method.CIM);
         return board;
     }
 

@@ -34,4 +34,6 @@ public class StaticStats {
     public Set<Map.Entry<Integer, Properties>> getIdPropertyPairs() {
         return propertiesByParticleId.entrySet();
     }
+
+
 }

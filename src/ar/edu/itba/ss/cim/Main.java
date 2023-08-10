@@ -23,6 +23,7 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+
         Arguments argsObj;
         if (args.length == 0) {
             argsObj = new Arguments(new int[]{10,100,500,1000},10,2,3);

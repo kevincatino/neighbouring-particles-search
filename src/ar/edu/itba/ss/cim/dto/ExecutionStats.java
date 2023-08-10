@@ -5,19 +5,22 @@ public class ExecutionStats {
         return particles;
     }
 
-    public double getBruteForce() {
+
+
+    private final int particles;
+
+    public TimeStatsDto getBruteForce() {
         return bruteForce;
     }
 
-    public double getCim() {
+    public TimeStatsDto getCim() {
         return cim;
     }
 
-    private final int particles;
-    private final long bruteForce;
-    private final long cim;
+    private final TimeStatsDto bruteForce;
+    private final TimeStatsDto cim;
 
-    public ExecutionStats(int particles, long bruteForce, long cim) {
+    public ExecutionStats(int particles, TimeStatsDto bruteForce, TimeStatsDto cim) {
         this.particles = particles;
         this.bruteForce = bruteForce;
         this.cim = cim;
