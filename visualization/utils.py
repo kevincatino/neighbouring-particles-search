@@ -4,14 +4,14 @@ import models
 
 def parse_json():
     # Opening JSON file
-    f = open('data.json')
+    f = open('../sequence4.json')
 
     # returns JSON object as
     # a dictionary
     json_input = json.load(f)
 
-    L = json_input['L']
-    M = json_input['M']
+    L = json_input['l']
+    M = json_input['m']
     rc = json_input['rc']
     data = json_input['data']
 
@@ -24,18 +24,22 @@ def parse_json():
         particles = []
         for part in time['particles']:
             obj_particle = models.Particle(part['id'], part['coordinates']['x'], part['coordinates']['y'], part['radius'])
-            for n in part['neighbours']:
-                neighbour = models.Particle(part['id'], part['coordinates']['x'], part['coordinates']['y'], part['radius'])
+            for n in part['neigbours']:
+                neighbour = n['id']
                 obj_particle.neighbours.append(neighbour)
             particles.append(obj_particle)
         board_list.append(models.Board(L, M, rc, time['time'], particles))
 
+    for b in board_list:
+        #print("L:" + b.L + " Time:" + b.time + " rc:" + b.rc)
+        for part in b.particles:
+            print(part)
     return board_list
 
 
 def parse_time_json():
     # Opening JSON file
-    f = open('time.json')
+    f = open('stats.json')
 
     # returns JSON object as
     # a dictionary
