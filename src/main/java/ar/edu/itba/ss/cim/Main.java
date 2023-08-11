@@ -26,7 +26,7 @@ public class Main {
 
         Arguments argsObj;
         if (args.length == 0) {
-            argsObj = new Arguments(new int[]{80,160,320, 640},10,1,3, new int[]{6,7,8,9,10,11});
+            argsObj = new Arguments(new int[]{1500},10,1,3, new int[]{6,7,8,9,10,11});
         } else {
             // Ejemplo:
             // java -jar ./neighbouring-particles-search-1.0-SNAPSHOT.jar -n 50 -n 100 -n 500 -n 1000 -l 10 -r 2.5 -t 5
