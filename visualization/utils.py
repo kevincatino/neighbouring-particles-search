@@ -4,7 +4,7 @@ import models
 
 def parse_json():
     # Opening JSON file
-    f = open('../sequence1.json')
+    f = open('../sequence4.json')
 
     # returns JSON object as
     # a dictionary
