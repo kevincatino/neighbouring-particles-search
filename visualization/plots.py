@@ -80,8 +80,11 @@ def plot_particles_in_board(board):
 def plot_times(time_measures: TimeMeasures):
     fig, ax = plt.subplots()
 
-    ax.plot(time_measures.particles_count, time_measures.bf_times, label='Brute force')
-    ax.plot(time_measures.particles_count, time_measures.cim_times, label='CIM')
+    bf_error = [time_measures.bf_min, time_measures.bf_max]
+    cim_error = [time_measures.cim_min, time_measures.cim_max]
+
+    ax.errorbar(time_measures.particles_count, time_measures.bf_avg, yerr=bf_error, label='Brute force', fmt='-o')
+    ax.errorbar(time_measures.particles_count, time_measures.cim_avg, yerr=cim_error, label='CIM', fmt='-o')
 
     ax.set_xlabel('Particles')
     ax.set_ylabel('Time [ms]')
