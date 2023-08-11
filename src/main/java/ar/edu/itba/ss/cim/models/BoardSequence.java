@@ -39,6 +39,7 @@ public class BoardSequence implements Iterable<Board> {
         board.addParticles(particles);
     }
 
+
     public double getBoardLength() {
         return board.getBoardLength();
     }

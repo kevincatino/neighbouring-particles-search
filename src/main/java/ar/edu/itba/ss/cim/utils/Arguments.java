@@ -9,11 +9,18 @@ public class Arguments {
     private final double interactionRadius;
     private final int times;
 
-    public Arguments(int[] numberOfParticles, int boardLength, double interactionRadius, int times) {
+    public int[] getMs() {
+        return ms;
+    }
+
+    private final int[] ms;
+
+    public Arguments(int[] numberOfParticles, int boardLength, double interactionRadius, int times, int[] ms) {
         this.numberOfParticles = numberOfParticles;
         this.boardLength = boardLength;
         this.interactionRadius = interactionRadius;
         this.times = times;
+        this.ms = ms;
     }
 
     public int[] getNumberOfParticles() {
@@ -62,6 +69,6 @@ public class Arguments {
         for (int i = 0; i < numberOfParticles.size(); i++) {
             intArray[i] = numberOfParticles.get(i);
         }
-        return new Arguments(intArray, boardLength, interactionRadius, times);
+        return new Arguments(intArray, boardLength, interactionRadius, times, new int[]{4,5}); // TODO cambiar
     }
 }

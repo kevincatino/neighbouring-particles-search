@@ -26,7 +26,7 @@ public class Main {
 
         Arguments argsObj;
         if (args.length == 0) {
-            argsObj = new Arguments(new int[]{80,160,320, 640},10,1,3);
+            argsObj = new Arguments(new int[]{80,160,320, 640},10,1,3, new int[]{6,7,8,9,10,11});
         } else {
             // Ejemplo:
             // java -jar ./neighbouring-particles-search-1.0-SNAPSHOT.jar -n 50 -n 100 -n 500 -n 1000 -l 10 -r 2.5 -t 5
@@ -36,42 +36,44 @@ public class Main {
         int[] numberOfParticles = argsObj.getNumberOfParticles();
         double interactionRadius = argsObj.getInteractionRadius();
         double boardLength = argsObj.getBoardLength();
+        int[] ms = argsObj.getMs();
 
-        Integer M = null;
+        //Integer M = null;
         ExecutionStatsWrapper stats = new ExecutionStatsWrapper();
         for (int particlesNumber : numberOfParticles) {
+            for (int m : ms) {
+                FileNamesWrapper fileNameWrapper = Fileparser.generateInputData(particlesNumber, boardLength, interactionRadius, timeValues);
 
+                String STATIC_FILE_PATH = fileNameWrapper.StaticFileName;
+                String DYNAMIC_FILE_PATH = fileNameWrapper.DynamicFileName;
+                StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
+                List<TemporalCoordinates> temporalCoordinates = Fileparser.parseDynamicFile(DYNAMIC_FILE_PATH);
+                BoardSequence boardSequence = new BoardSequence(staticStats, temporalCoordinates, m, interactionRadius, Board.BoundaryConditions.NOT_PERIODIC);
 
-            FileNamesWrapper fileNameWrapper = Fileparser.generateInputData(particlesNumber, boardLength, interactionRadius, timeValues);
+                for (Board b : boardSequence) {
+                    long start = System.currentTimeMillis();
+                    b.getNeighbours(Board.Method.BRUTE_FORCE);
+                    long end = System.currentTimeMillis();
+                    long bruteForceComputationTime = end - start;
+                    System.out.printf("Brute force Computation time: %d ms\n", bruteForceComputationTime);
 
-            String STATIC_FILE_PATH = fileNameWrapper.StaticFileName;
-            String DYNAMIC_FILE_PATH = fileNameWrapper.DynamicFileName;
-            StaticStats staticStats = Fileparser.parseStaticFile(STATIC_FILE_PATH);
-            List<TemporalCoordinates> temporalCoordinates = Fileparser.parseDynamicFile(DYNAMIC_FILE_PATH);
-            BoardSequence boardSequence = new BoardSequence(staticStats, temporalCoordinates, M, interactionRadius, Board.BoundaryConditions.NOT_PERIODIC);
+                    start = System.currentTimeMillis();
+                    b.getNeighbours(Board.Method.CIM);
+                    end = System.currentTimeMillis();
+                    long cimComputationTime = end - start;
+                    System.out.printf("CIM Computation time: %d ms\n", cimComputationTime);
 
-            for (Board b : boardSequence) {
-                long start = System.currentTimeMillis();
-                b.getNeighbours(Board.Method.BRUTE_FORCE);
-                long end = System.currentTimeMillis();
-                long bruteForceComputationTime = end - start;
-                System.out.printf("Brute force Computation time: %d ms\n", bruteForceComputationTime);
+                    stats.addStats(particlesNumber, bruteForceComputationTime, cimComputationTime, m);
+                }
 
-                start = System.currentTimeMillis();
-                b.getNeighbours(Board.Method.CIM);
-                end = System.currentTimeMillis();
-                long cimComputationTime = end - start;
-                System.out.printf("CIM Computation time: %d ms\n", cimComputationTime);
+                boardSequence.writeToFile("sequence" + fileNameWrapper.getId() + ".json");
 
-                stats.addStats(particlesNumber, bruteForceComputationTime, cimComputationTime);
+                Particle.resetIdCounter();
             }
-
-            boardSequence.writeToFile("sequence" + fileNameWrapper.getId() + ".json");
-
-            Particle.resetIdCounter();
         }
 
         stats.writeToFile("stats.json");
+        stats.writeMToFile("mstats.json");
 
 
     }
