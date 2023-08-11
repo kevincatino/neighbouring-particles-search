@@ -53,3 +53,21 @@ def parse_time_json():
         time_measures.cim_avg.append(t['cim']['avg'])
 
     return time_measures
+
+def parse_m_time_json():
+    # Opening JSON file
+    f = open('../mtime.json')
+
+    # returns JSON object as
+    # a dictionary
+    json_input = json.load(f)
+
+    time_measures = models.MTimeMeasures()
+
+    for t in json_input:
+        time_measures.m.append(t['m'])
+        time_measures.max.append(t['time']['max'])
+        time_measures.min.append(t['time']['min'])
+        time_measures.avg.append(t['time']['avg'])
+
+    return time_measures

@@ -34,3 +34,10 @@ class TimeMeasures:
         self.cim_min = []
         self.cim_avg = []
 
+
+class MTimeMeasures:
+    def __init__(self):
+        self.m = []
+        self.max = []
+        self.min = []
+        self.avg = []

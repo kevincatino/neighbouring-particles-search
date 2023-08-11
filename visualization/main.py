@@ -3,8 +3,8 @@ from matplotlib.backends._backend_tk import NavigationToolbar2Tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from visualization.models import Board, Particle
-from visualization.plots import plot_particles_in_board, plot_times
-from visualization.utils import parse_time_json, parse_json
+from visualization.plots import plot_particles_in_board, plot_times, plot_m_times
+from visualization.utils import parse_time_json, parse_json, parse_m_time_json
 
 boards = parse_json()
 
@@ -33,3 +33,5 @@ plt.show()
 
 time_measures = parse_time_json()
 plot_times(time_measures)
+time_measures = parse_m_time_json()
+plot_m_times(time_measures)

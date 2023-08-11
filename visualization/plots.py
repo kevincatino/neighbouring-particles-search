@@ -2,7 +2,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
-from visualization.models import Board, TimeMeasures
+from visualization.models import Board, TimeMeasures, MTimeMeasures
 
 
 def configure_plot(board: Board):
@@ -89,6 +89,19 @@ def plot_times(time_measures: TimeMeasures):
     ax.set_xlabel('Particles')
     ax.set_ylabel('Time [ms]')
     ax.set_title('Brute force vs CIM method')
+    ax.grid(True)
+    plt.legend()
+    plt.show()
+
+def plot_m_times(time_measures: MTimeMeasures):
+    fig, ax = plt.subplots()
+
+    error = [time_measures.min, time_measures.max]
+    ax.errorbar(time_measures.m, time_measures.avg, yerr=error, fmt='-o')
+
+    ax.set_xlabel('M')
+    ax.set_ylabel('Time [ms]')
+    ax.set_title('Computation time for different M')
     ax.grid(True)
     plt.legend()
     plt.show()
