@@ -4,7 +4,7 @@ import models
 
 def parse_json():
     # Opening JSON file
-    f = open('../sequence4.json')
+    f = open('../sequence1.json')
 
     # returns JSON object as
     # a dictionary
@@ -30,16 +30,12 @@ def parse_json():
             particles.append(obj_particle)
         board_list.append(models.Board(L, M, rc, time['time'], particles))
 
-    for b in board_list:
-        #print("L:" + b.L + " Time:" + b.time + " rc:" + b.rc)
-        for part in b.particles:
-            print(part)
     return board_list
 
 
 def parse_time_json():
     # Opening JSON file
-    f = open('stats.json')
+    f = open('../stats.json')
 
     # returns JSON object as
     # a dictionary
@@ -48,8 +44,12 @@ def parse_time_json():
     time_measures = models.TimeMeasures()
 
     for t in json_input:
-        time_measures.particles_count.append(t['Particles'])
-        time_measures.bf_times.append(t['bruteForce'])
-        time_measures.cim_times.append(t['CIM'])
+        time_measures.particles_count.append(t['particles'])
+        time_measures.bf_max.append(t['bruteForce']['max'])
+        time_measures.bf_min.append(t['bruteForce']['min'])
+        time_measures.bf_avg.append(t['bruteForce']['avg'])
+        time_measures.cim_max.append(t['cim']['max'])
+        time_measures.cim_min.append(t['cim']['min'])
+        time_measures.cim_avg.append(t['cim']['avg'])
 
     return time_measures

@@ -27,5 +27,10 @@ class Board:
 class TimeMeasures:
     def __init__(self):
         self.particles_count = []
-        self.bf_times = []
-        self.cim_times = []
+        self.bf_max = []
+        self.bf_min = []
+        self.bf_avg = []
+        self.cim_max = []
+        self.cim_min = []
+        self.cim_avg = []
+
