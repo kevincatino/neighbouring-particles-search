@@ -9,13 +9,13 @@ public class Arguments {
     private final double interactionRadius;
     private final int times;
 
-    public int[] getMs() {
+    public Integer[] getMs() {
         return ms;
     }
 
-    private final int[] ms;
+    private final Integer[] ms;
 
-    public Arguments(int[] numberOfParticles, int boardLength, double interactionRadius, int times, int[] ms) {
+    public Arguments(int[] numberOfParticles, int boardLength, double interactionRadius, int times, Integer[] ms) {
         this.numberOfParticles = numberOfParticles;
         this.boardLength = boardLength;
         this.interactionRadius = interactionRadius;
@@ -41,6 +41,7 @@ public class Arguments {
 
     public static Arguments parseArguments(String[] args) {
         List<Integer> numberOfParticles = new ArrayList<>();
+        List<Integer> msList = new ArrayList<>();
         int boardLength = -1;
         double interactionRadius = -1;
         int times = -1;
@@ -57,11 +58,12 @@ public class Arguments {
                 case "-l" -> boardLength = Integer.parseInt(value);
                 case "-r" -> interactionRadius = Double.parseDouble(value);
                 case "-t" -> times = Integer.parseInt(value);
+                case "-m" -> msList.add(Integer.parseInt(value));
                 default -> throw new IllegalArgumentException("Unknown flag: " + flag);
             }
         }
 
-        if (numberOfParticles.isEmpty() || boardLength == -1 || interactionRadius == -1 || times == -1) {
+        if (numberOfParticles.isEmpty() || boardLength == -1 || interactionRadius == -1 || times == -1 ) {
             throw new IllegalArgumentException("Missing or incomplete arguments.");
         }
         int[] intArray = new int[numberOfParticles.size()];
@@ -69,6 +71,11 @@ public class Arguments {
         for (int i = 0; i < numberOfParticles.size(); i++) {
             intArray[i] = numberOfParticles.get(i);
         }
-        return new Arguments(intArray, boardLength, interactionRadius, times, new int[]{4,5}); // TODO cambiar
+        Integer[] intArrayM = new Integer[msList.size()];
+
+        for (int i = 0; i < msList.size(); i++) {
+            intArrayM[i] = msList.get(i);
+        }
+        return new Arguments(intArray, boardLength, interactionRadius, times, intArrayM);
     }
 }
