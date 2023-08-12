@@ -48,15 +48,15 @@ def parse_time_json():
         time_measures.bf_max.append(t['bruteForce']['max'])
         time_measures.bf_min.append(t['bruteForce']['min'])
         time_measures.bf_avg.append(t['bruteForce']['avg'])
-        time_measures.cim_max.append(t['cim']['max'])
-        time_measures.cim_min.append(t['cim']['min'])
+        time_measures.cim_max.append(t['cim']['max']-t['cim']['avg'])
+        time_measures.cim_min.append(t['cim']['avg']-t['cim']['min'])
         time_measures.cim_avg.append(t['cim']['avg'])
 
     return time_measures
 
 def parse_m_time_json():
     # Opening JSON file
-    f = open('../mtime.json')
+    f = open('../mstats.json')
 
     # returns JSON object as
     # a dictionary
@@ -66,8 +66,8 @@ def parse_m_time_json():
 
     for t in json_input:
         time_measures.m.append(t['m'])
-        time_measures.max.append(t['time']['max'])
-        time_measures.min.append(t['time']['min'])
+        time_measures.max.append(t['time']['max']-t['time']['avg'])
+        time_measures.min.append(t['time']['avg']-t['time']['min'])
         time_measures.avg.append(t['time']['avg'])
 
     return time_measures
